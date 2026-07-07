@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEESA Ads Dashboard — Live</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--navy:#1a2b4a;--orange:#e55a1c;--ol:#fef1eb;--slate:#f5f6f8;--bd:#e2e5eb;--text:#1a2b4a;--muted:#6b7a99;--green:#0a7c4a;--gbg:#eaf5f0;--amber:#b85c00;--abg:#fef4e8;--red:#c0271a;--rbg:#fdecea;--blue:#185fa5;--bbg:#e6f1fb;--gray:#4a5568;--gbg2:#f0f1f3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--slate);color:var(--text);font-size:14px}
+.hdr{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:17px;font-weight:600}
+.hdr p{font-size:11px;opacity:.6;margin-top:2px}
+.bdg{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--orange);color:#fff}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;opacity:.7}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px}
+.date-filter{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.date-filter label{font-size:12px;font-weight:600;color:var(--text)}
+.date-filter input{padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:inherit}
+.date-filter button{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted);transition:all 0.2s}
+.date-filter button:hover{color:var(--text)}
+.date-filter button.load{background:var(--navy);color:#fff;border-color:var(--navy)}
+.date-filter button.quick{background:var(--orange);color:#fff;border-color:var(--orange)}
+.stitle{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:8px}
+.stitle::after{content:'';flex:1;height:1px;background:var(--bd)}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-bottom:1.25rem}
+.kpi{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:12px 14px}
+.kpi.ac{border-top:3px solid var(--orange)}
+.kpi.ai{border-top:3px solid #534ab7}
+.kl{font-size:11px;color:var(--muted);margin-bottom:4px}
+.kv{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+.ks{font-size:11px;margin-top:4px}
+.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.neu{color:var(--muted)}
+.tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:6px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted)}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel{display:none}.panel.on{display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:14px}
+@media(max-width:660px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px}
+.card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px}
+.cw{position:relative;width:100%}
+.note{background:var(--abg);border:1px solid #f6b26b;border-radius:7px;padding:9px 11px;font-size:11px;color:#7a3c00;line-height:1.5;margin-bottom:14px}
+.bmt{width:100%;border-collapse:collapse;font-size:12px}
+.bmt th{text-align:left;color:var(--muted);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:3px 6px;border-bottom:1px solid var(--bd)}
+.bmt td{padding:7px 6px;border-bottom:1px solid var(--bd);color:var(--text)}
+.bmt tr:last-child td{border-bottom:none}
+.bmt .cur{font-weight:600}
+.ga4-link{display:inline-block;background:var(--navy);color:#fff;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;margin-top:10px;border:none}
+.ga4-link:hover{background:#0f1b2f}
+.ft{text-align:center;font-size:10px;color:var(--muted);padding:14px;border-top:1px solid var(--bd);margin-top:6px}
+.ltabs{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.ltab{padding:6px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted)}
+.ltab.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+.lpanel{display:none}.lpanel.on{display:block}
+.lvwrap{max-height:440px;overflow:auto;border:1px solid var(--bd);border-radius:9px;background:#fff}
+.lvtbl{width:100%;border-collapse:collapse;font-size:11px;min-width:720px}
+.lvtbl th{position:sticky;top:0;z-index:1;background:#fff;text-align:left;color:var(--muted);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:7px 8px;border-bottom:1.5px solid var(--bd)}
+.lvtbl td{padding:6px 8px;border-bottom:1px solid var(--bd);color:var(--text);vertical-align:top}
+.lvtbl th.r,.lvtbl td.r{text-align:right;white-space:nowrap}
+.lvtbl td.lvname,.lvtbl th.lvname{max-width:300px;line-height:1.3}
+.lvtbl tr.lvfoot td{position:sticky;bottom:0;background:var(--slate);font-weight:700;border-top:1.5px solid var(--bd)}
+.lvtbl tbody tr:hover td{background:#fafbfc}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+.error{background:var(--rbg);color:var(--red);border:1px solid #fcc;border-radius:6px;padding:12px;margin-bottom:18px;font-size:12px;display:none}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div><h1>SEESA Ads Performance Dashboard</h1><p>Live · Meta Ads · Google Ads · Microsoft Ads · HubSpot Deals · By date</p></div>
+  <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+    <span class="bdg" id="badge">Select date range</span>
+    <span class="live"><span class="dot"></span>Live · Meta connected · HubSpot connected</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- Date Filter -->
+<div class="date-filter">
+  <label>Start Date:</label>
+  <input type="date" id="startDate" />
+  <label>End Date:</label>
+  <input type="date" id="endDate" />
+  <button class="load" onclick="loadDashboardData()">Load Data</button>
+  <button class="quick" onclick="setDateRange('last7')">Last 7 Days</button>
+  <button class="quick" onclick="setDateRange('lastMonth')">Last Month</button>
+</div>
+
+<div id="error" class="error"></div>
+<div id="loading" class="loading" style="display:none">Loading live dashboard data...</div>
+
+<div id="dashContent" style="display:none">
+
+<!-- OVERALL KPIS -->
+<div class="stitle" style="margin-top:4px">Overall — all channels</div>
+<div class="krow">
+  <div class="kpi ac"><div class="kl">Total ad spend</div><div class="kv" id="totalSpend">—</div><div class="ks neu" id="spendBreakdown">—</div></div>
+  <div class="kpi ac"><div class="kl">Total deals closed</div><div class="kv" id="totalDeals">—</div><div class="ks neu">All sources</div></div>
+  <div class="kpi ac"><div class="kl">Total deal value</div><div class="kv" id="totalDealValue">—</div><div class="ks neu">HubSpot closed-won</div></div>
+  <div class="kpi ac"><div class="kl">Paid deals (ads)</div><div class="kv" id="paidDeals">—</div><div class="ks neu">Paid Social + Paid Search</div></div>
+  <div class="kpi ac"><div class="kl">Paid deal value</div><div class="kv" id="paidDealValue">—</div><div class="ks neu">Meta + Google + Microsoft</div></div>
+  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDeals">—</div><div class="ks neu">Own channel · R0 spend</div></div>
+</div>
+
+<!-- CHANNEL TABS -->
+<div class="stitle">Performance by channel</div>
+<div class="tabs">
+  <div class="tab on" onclick="showTab('meta',this)">Meta Ads</div>
+  <div class="tab" onclick="showTab('google',this)">Google Ads</div>
+  <div class="tab" onclick="showTab('microsoft',this)">Microsoft Ads</div>
+  <div class="tab" onclick="showTab('aideals',this)">AI Referrals</div>
+  <div class="tab" onclick="showTab('website',this)">Website Traffic</div>
+</div>
+
+<!-- META TAB -->
+<div id="tab-meta" class="panel on">
+  <div class="g3">
+    <div class="kpi"><div class="kl">Meta spend</div><div class="kv" id="metaSpend">—</div><div class="ks" id="metaSpendContext">—</div></div>
+    <div class="kpi"><div class="kl">Paid Social deals</div><div class="kv" id="metaDeals">—</div><div class="ks" id="metaDealsValue">—</div></div>
+    <div class="kpi"><div class="kl">Cost per deal (Meta)</div><div class="kv" id="metaCPD">—</div><div class="ks" id="metaCPDContext">—</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h3>Meta campaigns — active only</h3>
+      <div class="lvwrap"><table class="lvtbl"><thead><tr><th class="lvname">Name</th><th>Status</th><th class="r">Spend</th><th class="r">Impr.</th><th class="r">CTR</th><th class="r">CPM</th><th class="r">Results</th><th class="r">Cost/result</th></tr></thead><tbody id="metaCampaignsTable">
+        <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No campaigns for this date range</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- GOOGLE TAB -->
+<div id="tab-google" class="panel">
+  <div class="note">Google Ads campaign-level data not yet connected. Deals below are estimated (80% of Paid Search attributed to Google). Spend is R20,000/month fixed.</div>
+  <div class="g3">
+    <div class="kpi ac"><div class="kl">Google spend</div><div class="kv">R20,000</div><div class="ks neu">Fixed monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~6</div><div class="ks neu">Est. deal value: R7,281</div></div>
+    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv warn">R3,333</div><div class="ks good">Within R2k–R4k benchmark ✓</div></div>
+  </div>
+</div>
+
+<!-- MICROSOFT TAB -->
+<div id="tab-microsoft" class="panel">
+  <div class="note">Microsoft Ads campaign-level data not yet connected. Est. 1 deal attributed to Microsoft (20% of Paid Search). Spend is R5,000/month fixed.</div>
+  <div class="g3">
+    <div class="kpi ac"><div class="kl">Microsoft spend</div><div class="kv">R5,000</div><div class="ks neu">Fixed monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~1</div><div class="ks neu">Est. deal value: R1,820</div></div>
+    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv good">R2,500</div><div class="ks good">Within R2k–R4k benchmark ✓</div></div>
+  </div>
+</div>
+
+<!-- AI REFERRALS TAB -->
+<div id="tab-aideals" class="panel">
+  <div class="g3">
+    <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDealCount">—</div><div class="ks neu">This period</div></div>
+    <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv" id="aiDealValue">—</div><div class="ks neu">Total</div></div>
+    <div class="kpi ai"><div class="kl">Cost to acquire</div><div class="kv good">R0</div><div class="ks good">Zero paid spend</div></div>
+  </div>
+  <div class="card"><h3>Why AI Referrals matters</h3>
+    <table class="bmt"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
+    <tr><td>Ad spend to generate</td><td class="good"><strong>R0</strong></td></tr>
+    <tr><td>Cost per deal</td><td class="good"><strong>R0</strong></td></tr>
+    <tr><td>ROAS</td><td class="good"><strong>Infinite</strong></td></tr>
+    <tr><td>Source</td><td>ChatGPT · Google AI · Claude · Perplexity</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- WEBSITE TRAFFIC TAB -->
+<div id="tab-website" class="panel">
+  <div class="card"><h3>Google Analytics 4 Dashboard</h3>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Live GA4 data with top traffic sources, high-performing pages, geographic breakdown, session metrics, and AI platforms isolated (Perplexity, ChatGPT, Gemini, etc.).</p>
+  <a href="https://datastudio.google.com/reporting/4ebba862-42a1-42f1-a8e8-b9e544872c28" target="_blank" class="ga4-link">Open GA4 Dashboard in Looker Studio →</a>
+  </div>
+</div>
+
+<!-- META DRILL-DOWN LEVELS -->
+<div class="stitle">Meta performance — campaign / ad set / ad</div>
+<div class="note"><strong>Active entities only</strong> — paused, campaign-paused and ended items are hidden. Colour cues: CTR <span class="good">≥4% good</span>/<span class="bad">&lt;1.5% weak</span>, CPM <span class="good">&lt;R40 good</span>/<span class="bad">&gt;R80 high</span>, cost/lead <span class="good">≤R250 good</span>/<span class="bad">&gt;R600 high</span>.</div>
+<div id="mlvlbox">
+  <div class="ltabs">
+    <div class="ltab on" onclick="showLvl('campaign',this)">Campaign</div>
+    <div class="ltab" onclick="showLvl('adset',this)">Ad set</div>
+    <div class="ltab" onclick="showLvl('ad',this)">Ad</div>
+  </div>
+  <div id='lvl-campaign' class='lpanel on'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlCampaignTable">
+    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active campaigns</td></tr>
+  </tbody></table></div></div>
+
+  <div id='lvl-adset' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlAdsetTable">
+    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active ad sets</td></tr>
+  </tbody></table></div></div>
+
+  <div id='lvl-ad' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlAdTable">
+    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active ads</td></tr>
+  </tbody></table></div></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="ft">SEESA (Pty) Ltd · Ads Dashboard · Live Data · Meta (live) · HubSpot (live) · Google & Microsoft (estimated) · Internal use only</div>
+
+<script>
+function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(today.getTime()-30*24*60*60*1000);document.getElementById('startDate').valueAsDate=thirtyDaysAgo;document.getElementById('endDate').valueAsDate=today;}
+
+function setDateRange(range){const today=new Date();let start;if(range==='last7'){start=new Date(today.getTime()-7*24*60*60*1000);}else if(range==='lastMonth'){start=new Date(today.getTime()-30*24*60*60*1000);}
+document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
+
+async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){showError('Please select both start and end dates');return;}
+document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';document.getElementById('error').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok){throw new Error(data.error||'Failed to fetch data');}
+populateDashboard(data);document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){showError(err.message);document.getElementById('loading').style.display='none';}}
+
+function populateDashboard(data){const{meta,hubspot,dateRange}=data;const googleAds=data.googleAds||{spend:20000,estimatedDeals:6,estimatedDealValue:7281,costPerDeal:3333};const microsoftAds=data.microsoftAds||{spend:5000,estimatedDeals:1,estimatedDealValue:1820,costPerDeal:2500};document.getElementById('badge').textContent=`${dateRange.startDate} to ${dateRange.endDate}`;const totalAdSpend=parseFloat(meta.totalSpend)+(googleAds.spend||20000)+(microsoftAds.spend||5000);document.getElementById('totalSpend').textContent=`R${totalAdSpend.toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('spendBreakdown').textContent=`Meta R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})} · Google R${googleAds.spend} · Microsoft R${microsoftAds.spend}`;document.getElementById('totalDeals').textContent=hubspot.totalDeals;document.getElementById('totalDealValue').textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('paidDeals').textContent=hubspot.paidDeals;document.getElementById('paidDealValue').textContent=`R${parseFloat(hubspot.paidDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('aiDeals').textContent=hubspot.aiReferralDeals;document.getElementById('metaSpend').textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;const metaPaidDeals=hubspot.dealsBySource['PAID_SOCIAL']||0;document.getElementById('metaDeals').textContent=metaPaidDeals;document.getElementById('metaDealsValue').textContent=`R${(metaPaidDeals*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})} deal value`;const cpd=meta.totalLeads>0?(parseFloat(meta.totalSpend)/meta.totalLeads*3.5):-1;document.getElementById('metaCPD').textContent=cpd>0?`R${cpd.toLocaleString('en-ZA',{maximumFractionDigits:0})}`:'-';document.getElementById('metaCPDContext').textContent=`${meta.totalLeads} leads · ${meta.campaigns.length} active campaigns`;const campaignRows=meta.campaigns.slice(0,20).map(c=>{const statusColor=c.effective_status==='ACTIVE'?'var(--green)':'var(--amber)';return`<tr><td class='lvname'>${c.name}</td><td><span style="color:${statusColor};font-weight:600">${c.effective_status}</span></td><td class='r'>${c.spend||'-'}</td><td class='r'>${c.impressions?`${(parseInt(c.impressions)/1000).toFixed(0)}K`:'-'}</td><td class='r'>${c.ctr||'-'}</td><td class='r'>${c.cpm||'-'}</td><td class='r'>${c.leads||'-'}</td><td class='r'>${c.cpl||'-'}</td></tr>`}).join('');document.getElementById('lvlCampaignTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active campaigns</td></tr>';document.getElementById('metaCampaignsTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No campaigns for this date range</td></tr>';document.getElementById('aiDealCount').textContent=hubspot.aiReferralDeals;document.getElementById('aiDealValue').textContent=`R${(hubspot.aiReferralDeals*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;console.log('Dashboard loaded with data:',data);}
+
+function showTab(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('tab-'+id).classList.add('on');el.classList.add('on');}
+
+function showLvl(id,el){document.getElementById('mlvlbox').querySelectorAll('.lpanel').forEach(p=>p.classList.remove('on'));document.getElementById('mlvlbox').querySelectorAll('.ltab').forEach(t=>t.classList.remove('on'));document.getElementById('lvl-'+id).classList.add('on');el.classList.add('on');}
+
+function showError(message){const errorDiv=document.getElementById('error');errorDiv.textContent=message;errorDiv.style.display='block';document.getElementById('loading').style.display='none';}
+
+setDefaultDates();
+</script>
+</body>
+</html>
