@@ -9,13 +9,17 @@ app.use(express.json());
 const SEESA_META_ACCOUNT = '1326328365076410';
 const SEESA_HUBSPOT_PORTAL = '49403143';
 
-// Helper: fetch Meta Ads data BY DATE RANGE using account insights (no breakdowns)
+// Helper: fetch Meta Ads data BY DATE RANGE using campaigns with time_range
 async function fetchMetaCampaigns(startDate, endDate) {
   try {
-    // Get account-level insights for date range (no breakdowns - just total spend data)
-    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/insights?fields=spend,impressions,clicks,reach,actions,action_values&date_start=${startDate}&date_stop=${endDate}&access_token=${process.env.META_ACCESS_TOKEN}`;
+    // Use campaigns endpoint with time_range for date filtering
+    // Format: {"since":"YYYY-MM-DD","until":"YYYY-MM-DD"}
+    const timeRange = JSON.stringify({since: startDate, until: endDate});
+    const encodedRange = encodeURIComponent(timeRange);
     
-    console.log(`[META] Requesting account insights for ${startDate} to ${endDate}`);
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status,status&time_range=${encodedRange}&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
+    
+    console.log(`[META] Requesting campaigns with time_range: ${startDate} to ${endDate}`);
     const res = await fetch(url);
     const data = await res.json();
     
@@ -26,33 +30,29 @@ async function fetchMetaCampaigns(startDate, endDate) {
       return [];
     }
     
-    // Account-level totals
-    if (data.data && data.data.length > 0) {
-      const row = data.data[0];
-      const totalSpend = parseFloat(row.spend || 0);
-      const totalImpressions = parseInt(row.impressions || 0);
-      const totalClicks = parseInt(row.clicks || 0);
-      const totalResults = row.actions ? row.actions.reduce((sum, a) => sum + parseInt(a.value || 0), 0) : 0;
+    const campaigns = (data.data || []).map(c => {
+      const spend = parseFloat(c.amount_spent || 0);
+      const impressions = parseInt(c.impressions || 0);
+      const clicks = parseInt(c.clicks || 0);
+      const results = c.results?.value ? parseInt(c.results.value.split(' ')[0]) : 0;
       
-      console.log(`[META] Account totals: Spend R${totalSpend}, Impressions ${totalImpressions}, Results ${totalResults}`);
-      
-      // Return single aggregated "campaign" representing account totals
-      return [{
-        id: 'account-total',
-        name: 'Account Total',
-        amount_spent: totalSpend,
-        impressions: totalImpressions,
-        clicks: totalClicks,
-        reach: row.reach ? parseInt(row.reach) : 0,
-        results: totalResults,
-        effective_status: 'ACTIVE',
-        ctr: totalImpressions > 0 ? `${((totalClicks / totalImpressions) * 100).toFixed(2)}%` : '—',
-        cpm: totalImpressions > 0 ? `R${(totalSpend / (totalImpressions / 1000)).toFixed(2)}` : '—',
-        cost_per_result: totalResults > 0 ? `R${(totalSpend / totalResults).toFixed(2)}` : '—'
-      }];
-    }
+      return {
+        id: c.id,
+        name: c.name || 'Unknown',
+        amount_spent: spend,
+        impressions: impressions,
+        clicks: clicks,
+        reach: parseInt(c.reach || 0),
+        results: results,
+        effective_status: c.effective_status || 'PAUSED',
+        ctr: impressions > 0 ? `${((clicks / impressions) * 100).toFixed(2)}%` : '—',
+        cpm: impressions > 0 ? `R${(spend / (impressions / 1000)).toFixed(2)}` : '—',
+        cost_per_result: results > 0 ? `R${(spend / results).toFixed(2)}` : '—'
+      };
+    });
     
-    return [];
+    console.log(`[META] Fetched ${campaigns.length} campaigns for ${startDate} to ${endDate}`);
+    return campaigns;
   } catch (err) {
     console.error('[META] Exception:', err.message);
     return [];
