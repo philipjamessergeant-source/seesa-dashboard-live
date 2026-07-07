@@ -12,10 +12,12 @@ const SEESA_HUBSPOT_PORTAL = '49403143';
 // Helper: fetch Meta Ads data
 async function fetchMetaCampaigns(startDate, endDate) {
   try {
-    const url = `https://graph.facebook.com/v18.0/${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status&access_token=${process.env.META_ACCESS_TOKEN}&time_range={"since":"${startDate}","until":"${endDate}"}&limit=100`;
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status&access_token=${process.env.META_ACCESS_TOKEN}&time_range={"since":"${startDate}","until":"${endDate}"}&limit=100`;
     
+    console.log('Fetching Meta campaigns for', startDate, 'to', endDate);
     const res = await fetch(url);
     const data = await res.json();
+    console.log('Meta response:', data.data ? `${data.data.length} campaigns` : `Error: ${JSON.stringify(data.error)}`);
     return data.data || [];
   } catch (err) {
     console.error('Meta API error:', err);
@@ -112,6 +114,9 @@ app.post('/api/dashboard-data', async (req, res) => {
       dealsByProduct[deal.properties.dealname] = (dealsByProduct[deal.properties.dealname] || 0) + 1;
     });
 
+    const paidDeals = (dealsBySource['PAID_SOCIAL'] || 0) + (dealsBySource['PAID_SEARCH'] || 0);
+    const paidDealValue = paidDeals * 1200; // Estimate ~R1,200 avg deal value
+    
     res.json({
       dateRange: { startDate, endDate },
       meta: {
@@ -123,8 +128,23 @@ app.post('/api/dashboard-data', async (req, res) => {
       hubspot: {
         totalDeals: totalDeals || 0,
         totalDealValue: (totalDealValue || 0).toFixed(2),
+        paidDeals: paidDeals,
+        paidDealValue: paidDealValue.toFixed(2),
+        aiReferralDeals: dealsBySource['AI_REFERRALS'] || 0,
         dealsBySource: dealsBySource,
         dealsByProduct: dealsByProduct
+      },
+      googleAds: {
+        spend: 20000,
+        estimatedDeals: 6,
+        estimatedDealValue: 7281,
+        costPerDeal: 3333
+      },
+      microsoftAds: {
+        spend: 5000,
+        estimatedDeals: 1,
+        estimatedDealValue: 1820,
+        costPerDeal: 2500
       }
     });
   } catch (err) {
