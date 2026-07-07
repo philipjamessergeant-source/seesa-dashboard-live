@@ -201,7 +201,7 @@ function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(t
 function setDateRange(range){const today=new Date();let start;if(range==='last7'){start=new Date(today.getTime()-7*24*60*60*1000);}else if(range==='lastMonth'){start=new Date(today.getTime()-30*24*60*60*1000);}
 document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
 
-async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||endDate){showError('Please select both start and end dates');return;}
+async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){showError('Please select both start and end dates');return;}
 document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';document.getElementById('error').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok){throw new Error(data.error||'Failed to fetch data');}
 populateDashboard(data);document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){showError(err.message);document.getElementById('loading').style.display='none';}}
 
