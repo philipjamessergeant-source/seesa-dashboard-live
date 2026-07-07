@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SEESA Ads Dashboard — Live</title>
+<title>SEESA Ads Dashboard — June 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root{--navy:#1a2b4a;--orange:#e55a1c;--ol:#fef1eb;--slate:#f5f6f8;--bd:#e2e5eb;--text:#1a2b4a;--muted:#6b7a99;--green:#0a7c4a;--gbg:#eaf5f0;--amber:#b85c00;--abg:#fef4e8;--red:#c0271a;--rbg:#fdecea;--blue:#185fa5;--bbg:#e6f1fb;--gray:#4a5568;--gbg2:#f0f1f3}
@@ -17,12 +17,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .wrap{max-width:1100px;margin:0 auto;padding:18px 14px}
-.date-filter{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.date-filter label{font-size:12px;font-weight:600;color:var(--text)}
-.date-filter input{padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:inherit}
-.date-filter button{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted);transition:all 0.2s}
-.date-filter button.load{background:var(--navy);color:#fff;border-color:var(--navy)}
-.date-filter button.quick{background:var(--orange);color:#fff;border-color:var(--orange)}
 .stitle{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:8px}
 .stitle::after{content:'';flex:1;height:1px;background:var(--bd)}
 .krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-bottom:1.25rem}
@@ -42,176 +36,601 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @media(max-width:660px){.g2,.g3{grid-template-columns:1fr}}
 .card{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px}
 .card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px}
+.cw{position:relative;width:100%}
+.camp{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:13px 15px;margin-bottom:9px}
+.ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-bottom:9px}
+.cn{font-size:13px;font-weight:600;color:var(--navy);line-height:1.35}
+.cs{font-size:11px;color:var(--muted);margin-top:2px}
+.pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0;letter-spacing:.02em}
+.pg{background:var(--gbg);color:var(--green)}
+.pa{background:var(--abg);color:var(--amber)}
+.pr{background:var(--rbg);color:var(--red)}
+.pb{background:var(--bbg);color:var(--blue)}
+.pp{background:#eeedfe;color:#534ab7}
+.pn{background:var(--gbg2);color:var(--gray)}
+.mets{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:9px}
+.m{background:var(--slate);border-radius:5px;padding:6px 4px;text-align:center;border:1px solid var(--bd)}
+.mv{font-size:12px;font-weight:600;color:var(--navy)}
+.ml{font-size:9px;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.03em}
+.sbar{height:4px;border-radius:2px;background:var(--slate);margin-top:6px;overflow:hidden}
+.sf{height:100%;border-radius:2px}
+.vt{font-size:12px;color:var(--text);line-height:1.55;margin:0 0 7px}
+.ac{border-left:3px solid var(--orange);border-radius:0 var(--radius,6px) var(--radius,6px) 0;padding:6px 10px;font-size:11px;font-weight:600;color:var(--text)}
+.ptag{font-size:10px;padding:2px 6px;border-radius:3px;margin-left:5px}
+.sact{background:#dcfce7;color:#14532d}.spau{background:#f1f5f9;color:#475569}
+.note{background:var(--abg);border:1px solid #f6b26b;border-radius:7px;padding:9px 11px;font-size:11px;color:#7a3c00;line-height:1.5;margin-bottom:14px}
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.pname{font-size:12px;color:var(--text);width:120px;flex-shrink:0}
+.pbw{flex:1;background:var(--slate);border-radius:3px;height:18px;overflow:hidden}
+.pb2{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px}
+.pbs{font-size:10px;font-weight:600;color:#fff;white-space:nowrap}
+.pval{font-size:11px;color:var(--muted);width:80px;text-align:right;flex-shrink:0}
 .bmt{width:100%;border-collapse:collapse;font-size:12px}
 .bmt th{text-align:left;color:var(--muted);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:3px 6px;border-bottom:1px solid var(--bd)}
 .bmt td{padding:7px 6px;border-bottom:1px solid var(--bd);color:var(--text)}
 .bmt tr:last-child td{border-bottom:none}
 .bmt .cur{font-weight:600}
-.ga4-link{display:inline-block;background:var(--navy);color:#fff;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;margin-top:10px;border:none}
-.ga4-link:hover{background:#0f1b2f}
-.ft{text-align:center;font-size:10px;color:var(--muted);padding:14px;border-top:1px solid var(--bd);margin-top:6px}
-.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
-.error{background:var(--rbg);color:var(--red);border:1px solid #fcc;border-radius:6px;padding:12px;margin-bottom:18px;font-size:12px;display:none}
-.note{background:var(--abg);border:1px solid #f6b26b;border-radius:7px;padding:9px 11px;font-size:11px;color:#7a3c00;line-height:1.5;margin-bottom:14px}
-.cw{position:relative;width:100%}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:1rem}
 .pc{background:#fff;border-radius:9px;border:1px solid var(--bd);padding:12px;border-left:4px solid}
 .pct{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.pcs{font-size:11px;color:var(--muted);margin-bottom:2px;display:flex;justify-content:space-between}
+.pcs span{font-weight:600;color:var(--text)}
+.ft{text-align:center;font-size:10px;color:var(--muted);padding:14px;border-top:1px solid var(--bd);margin-top:6px}
+
+.mtx{border-collapse:separate;border-spacing:3px;font-size:11px;min-width:760px;width:100%}
+.mtx th{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:4px 5px;text-align:center;vertical-align:bottom;border:none}
+.mtx th.mxh{text-align:left;color:var(--muted)}
+.mtx th.mxc-paid{color:var(--orange)}
+.mtx th.mxc-org{color:var(--navy)}
+.mtx th.mxt{color:var(--muted)}
+.mtx td{padding:5px 5px;text-align:center;border-radius:5px;line-height:1.15}
+.mtx td.mxp{text-align:left;font-weight:600;color:var(--navy);white-space:nowrap;background:var(--slate)}
+.mtx td.mxcell b,.mtx td.mxtot b{display:block;font-size:12px;font-weight:700}
+.mtx td.mxcell span,.mtx td.mxtot span{display:block;font-size:9px;opacity:.9}
+.mtx td.mxempty{color:#c8cdd6;font-size:14px;background:var(--slate)}
+.mtx td.mxtot{background:#eef0f4;color:var(--navy)}
+.mtx tr.mxfootrow td.mxfoot{background:var(--navy);color:#fff}
+.mtx tr.mxfootrow td.mxpb{background:var(--navy);color:#fff}
+
+
+.ltabs{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.ltab{padding:6px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted)}
+.ltab.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+.lpanel{display:none}.lpanel.on{display:block}
+.lvwrap{max-height:440px;overflow:auto;border:1px solid var(--bd);border-radius:9px;background:#fff}
+.lvtbl{width:100%;border-collapse:collapse;font-size:11px;min-width:720px}
+.lvtbl th{position:sticky;top:0;z-index:1;background:#fff;text-align:left;color:var(--muted);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:7px 8px;border-bottom:1.5px solid var(--bd)}
+.lvtbl td{padding:6px 8px;border-bottom:1px solid var(--bd);color:var(--text);vertical-align:top}
+.lvtbl th.r,.lvtbl td.r{text-align:right;white-space:nowrap}
+.lvtbl td.lvname,.lvtbl th.lvname{max-width:300px;line-height:1.3}
+.lvtbl tr.lvfoot td{position:sticky;bottom:0;background:var(--slate);font-weight:700;border-top:1.5px solid var(--bd)}
+.lvtbl tbody tr:hover td{background:#fafbfc}
+
 </style>
 </head>
 <body>
 <div class="hdr">
-  <div><h1>SEESA Ads Performance Dashboard</h1><p>Live · Meta Ads · Google Ads · Microsoft Ads · HubSpot Deals · By date</p></div>
+  <div><h1>SEESA Ads Performance Dashboard</h1><p>Meta Ads · Google Ads · Microsoft Ads · By product · By province · Billboards · Events · June 2026</p></div>
   <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-    <span class="bdg" id="badge">Select date range</span>
-    <span class="live"><span class="dot"></span>Live · Meta connected · HubSpot connected</span>
+    <span class="bdg">June 2026</span>
+    <span class="live"><span class="dot"></span>Meta connected · HubSpot live</span>
   </div>
 </div>
 
 <div class="wrap">
 
 <!-- Date Filter -->
-<div class="date-filter">
-  <label>Start Date:</label>
-  <input type="date" id="startDate" />
-  <label>End Date:</label>
-  <input type="date" id="endDate" />
-  <button class="load" onclick="loadDashboardData()">Load Data</button>
-  <button class="quick" onclick="setDateRange('last7')">Last 7 Days</button>
-  <button class="quick" onclick="setDateRange('lastMonth')">Last Month</button>
+<div style="background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <label style="font-size:12px;font-weight:600">Start:</label>
+  <input type="date" id="startDate" style="padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px" />
+  <label style="font-size:12px;font-weight:600">End:</label>
+  <input type="date" id="endDate" style="padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px" />
+  <button onclick="loadDashboardData()" style="padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;background:var(--navy);color:#fff;border:1.5px solid var(--navy)">Load</button>
+  <button onclick="setDateRange('last7')" style="padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;background:var(--orange);color:#fff;border:1.5px solid var(--orange)">Last 7</button>
+  <button onclick="setDateRange('lastMonth')" style="padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;background:var(--orange);color:#fff;border:1.5px solid var(--orange)">Last 30</button>
 </div>
 
-<div id="error" class="error"></div>
-<div id="loading" class="loading" style="display:none">Loading live dashboard data...</div>
+<div id="loading" style="display:none;text-align:center;padding:40px;color:var(--muted)">Loading dashboard...</div>
+<div id="dashContent">
 
-<div id="dashContent" style="display:none">
-
-<!-- OVERALL KPIS -->
 <div class="stitle" style="margin-top:4px">Overall — all channels</div>
 <div class="krow">
-  <div class="kpi ac"><div class="kl">Meta spend</div><div class="kv" id="metaSpend">—</div><div class="ks neu" id="metaSpendContext">—</div></div>
-  <div class="kpi ac"><div class="kl">Meta leads</div><div class="kv" id="metaLeads">—</div><div class="ks neu">Form submissions</div></div>
-  <div class="kpi ac"><div class="kl">Closed deals</div><div class="kv" id="totalDeals">—</div><div class="ks neu">HubSpot closed-won</div></div>
-  <div class="kpi ac"><div class="kl">Deal value</div><div class="kv" id="totalDealValue">—</div><div class="ks neu">ZAR</div></div>
-  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDeals">—</div><div class="ks neu">Zero ad spend</div></div>
+  <div class="kpi ac"><div class="kl">Total ad spend</div><div class="kv">R71,723</div><div class="ks neu">Meta R46,723 · Google R20k · Microsoft R5k</div></div>
+  <div class="kpi ac"><div class="kl">Total deals closed</div><div class="kv">64</div><div class="ks neu">All sources · June 2026</div></div>
+  <div class="kpi ac"><div class="kl">Total retainer value</div><div class="kv">R79,975</div><div class="ks neu">Monthly debit orders</div></div>
+  <div class="kpi ac"><div class="kl">Paid deals (ads)</div><div class="kv">31</div><div class="ks neu">Paid Social + Paid Search</div></div>
+  <div class="kpi ac"><div class="kl">Paid deal value</div><div class="kv">R36,730</div><div class="ks neu">Meta + Google + Microsoft</div></div>
+  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv">4</div><div class="ks neu">R6,532 value · own channel</div></div>
 </div>
 
-<!-- CHANNEL TABS -->
 <div class="stitle">Performance by channel</div>
 <div class="tabs">
   <div class="tab on" onclick="showTab('meta',this)">Meta Ads</div>
   <div class="tab" onclick="showTab('google',this)">Google Ads</div>
   <div class="tab" onclick="showTab('microsoft',this)">Microsoft Ads</div>
   <div class="tab" onclick="showTab('aideals',this)">AI Referrals</div>
-  <div class="tab" onclick="showTab('website',this)">Website Traffic</div>
 </div>
 
-<!-- META TAB -->
+<!-- META -->
 <div id="tab-meta" class="panel on">
-  <div class="card"><h3>Meta campaigns — active only</h3>
-    <table class="bmt"><thead><tr><th>Campaign Name</th><th>Status</th><th>Spend</th><th>Impr.</th><th>CTR</th><th>CPM</th><th>Results</th><th>Cost/result</th></tr></thead><tbody id="metaCampaignsTable">
-      <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">Loading campaigns...</td></tr>
-    </tbody></table>
+  <div class="g3">
+    <div class="kpi"><div class="kl">Meta spend</div><div class="kv">R46,723</div><div class="ks warn">+365% vs May (R10,061)</div></div>
+    <div class="kpi"><div class="kl">Paid Social deals</div><div class="kv">24</div><div class="ks neu">R20,360 deal value</div></div>
+    <div class="kpi"><div class="kl">Cost per deal (Meta)</div><div class="kv warn">R1,947</div><div class="ks good">Within R2,000–R4,000 benchmark ✓</div></div>
   </div>
+  <div class="g2">
+    <div class="card"><h3>Spend vs leads by campaign</h3><div class="cw" style="height:190px"><canvas id="spendChart"></canvas></div></div>
+    <div class="card"><h3>Cost per lead (R150 = target)</h3><div class="cw" style="height:190px"><canvas id="cplChart"></canvas></div></div>
+  </div>
+
 </div>
 
-<!-- GOOGLE TAB -->
+<!-- GOOGLE -->
 <div id="tab-google" class="panel">
-  <div class="note">Google Ads UTM tracking live from 1 Jul 2026. Campaign-level data assessment in August 2026.</div>
+  <div class="note">Google Ads campaign-level data not yet connected. Deals below are estimated (80% of Paid Search attributed to Google) — exact split available from August 2026 once UTM data matures. Spend is R20,000/month fixed.</div>
   <div class="g3">
-    <div class="kpi ac"><div class="kl">Google spend</div><div class="kv">R20,000</div><div class="ks neu">Monthly budget</div></div>
-    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~6</div><div class="ks neu">From Paid Search</div></div>
-    <div class="kpi ac"><div class="kl">Est. CPD</div><div class="kv">R3,333</div><div class="ks good">Benchmark ✓</div></div>
+    <div class="kpi ac"><div class="kl">Google spend</div><div class="kv">R20,000</div><div class="ks neu">Fixed monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals (June)</div><div class="kv">~6</div><div class="ks neu">Est. deal value: R7,281</div></div>
+    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv warn">R3,333</div><div class="ks warn">Within R2k–R4k benchmark ✓</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h3>Paid Search deals — June 2026 <span style="font-size:11px;font-weight:400;color:var(--muted)">(Google + Microsoft combined)</span></h3>
+      <table class="bmt"><thead><tr><th>#</th><th>Company</th><th>Value</th><th>Date</th></tr></thead><tbody>
+        <tr><td>1</td><td>TG (Maoua Sport)</td><td class="cur">R1,052</td><td>12 Jun</td></tr>
+        <tr><td>2</td><td>TG (Maoua Sport)</td><td class="cur">R3,128</td><td>12 Jun</td></tr>
+        <tr><td>3</td><td>TG (Maoua Sport)</td><td class="cur">R1,703</td><td>12 Jun</td></tr>
+        <tr><td>4</td><td>Evolution Frameless Glass</td><td class="cur">R658</td><td>22 Jun</td></tr>
+        <tr><td>5</td><td>Evolution Frameless Glass</td><td class="cur">R1,064</td><td>22 Jun</td></tr>
+        <tr><td>6</td><td>SMALL WONDERS EDUCARE</td><td class="cur">R715</td><td>26 Jun</td></tr>
+        <tr><td>7</td><td>Zes Foods</td><td class="cur">R781</td><td>29 Jun</td></tr>
+        <tr><td colspan="2"><strong>Total — 7 deals</strong></td><td class="cur"><strong>R9,101</strong></td><td></td></tr>
+      </tbody></table>
+      <div style="background:var(--abg);border-radius:6px;padding:8px 10px;font-size:11px;color:#7a3c00;margin-top:10px">Google est. 6 deals (R7,281) · Microsoft est. 1 deal (R1,820). Exact split available August 2026.</div>
+    </div>
+    <div class="card"><h3>Google Ads — actions</h3>
+      <table class="bmt"><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
+        <tr><td>UTM tracking</td><td class="good">Live from 1 Jul 2026</td></tr>
+        <tr><td>Campaign type</td><td>Performance Max</td></tr>
+        <tr><td>Assessment ready</td><td class="warn">August 2026</td></tr>
+        <tr><td>Negative keywords</td><td class="warn">Review recommended</td></tr>
+        <tr><td>ROAS (est. first month)</td><td class="warn">0.36x → ~4.4x on LTV basis</td></tr>
+      </tbody></table>
+    </div>
   </div>
 </div>
 
-<!-- MICROSOFT TAB -->
+<!-- MICROSOFT -->
 <div id="tab-microsoft" class="panel">
-  <div class="note">Microsoft Ads UTM tracking live from 1 Jul 2026. Campaign-level data assessment in August 2026.</div>
+  <div class="note">Microsoft Ads campaign-level data not yet connected. Est. 1 deal attributed to Microsoft (20% of Paid Search). Exact split available from August 2026. Spend is R5,000/month fixed.</div>
   <div class="g3">
-    <div class="kpi ac"><div class="kl">Microsoft spend</div><div class="kv">R5,000</div><div class="ks neu">Monthly budget</div></div>
-    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~1</div><div class="ks neu">From Paid Search</div></div>
-    <div class="kpi ac"><div class="kl">Est. CPD</div><div class="kv">R2,500</div><div class="ks good">Benchmark ✓</div></div>
+    <div class="kpi ac"><div class="kl">Microsoft spend</div><div class="kv">R5,000</div><div class="ks neu">Fixed monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals (June)</div><div class="kv">~1</div><div class="ks neu">Est. deal value: R1,820</div></div>
+    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv good">R2,500</div><div class="ks good">Within R2k–R4k benchmark ✓</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h3>Est. Microsoft deal — June 2026</h3>
+      <table class="bmt"><thead><tr><th>#</th><th>Company</th><th>Value</th><th>Date</th></tr></thead><tbody>
+        <tr><td>1 (est.)</td><td>Zes Foods</td><td class="cur">R781</td><td>29 Jun</td></tr>
+        <tr><td colspan="2"><strong>Total — est. 1 deal</strong></td><td class="cur"><strong>~R1,820</strong></td><td></td></tr>
+      </tbody></table>
+      <div style="background:var(--abg);border-radius:6px;padding:8px 10px;font-size:11px;color:#7a3c00;margin-top:10px">Estimated based on 20% of Paid Search deals. Exact deal attribution available from August 2026 once UTM data matures. Company shown is illustrative only.</div>
+    </div>
+    <div class="card"><h3>Microsoft Ads — actions</h3>
+      <table class="bmt"><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>
+        <tr><td>UTM tracking</td><td class="good">Live from 1 Jul 2026</td></tr>
+        <tr><td>LinkedIn Profile Targeting</td><td class="bad">Not enabled — action now</td></tr>
+        <tr><td>Target job titles</td><td>Business Owner · HR Manager · Compliance Officer</td></tr>
+        <tr><td>Assessment ready</td><td class="warn">August 2026</td></tr>
+        <tr><td>ROAS (est. first month)</td><td class="warn">0.36x → ~4.4x on LTV basis</td></tr>
+      </tbody></table>
+    </div>
   </div>
 </div>
 
-<!-- AI REFERRALS TAB -->
+<!-- AI REFERRALS -->
 <div id="tab-aideals" class="panel">
   <div class="g3">
-    <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDealCount">—</div><div class="ks neu">This period</div></div>
-    <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv" id="aiDealValue">—</div><div class="ks neu">Total</div></div>
+    <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv">4</div><div class="ks neu">June 2026</div></div>
+    <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv">R6,932</div><div class="ks neu">Monthly retainer value</div></div>
     <div class="kpi ai"><div class="kl">Cost to acquire</div><div class="kv good">R0</div><div class="ks good">Zero paid spend</div></div>
   </div>
-  <div class="card"><h3>Deals by source</h3>
-    <table class="bmt"><thead><tr><th>Source</th><th>Count</th><th>Value</th></tr></thead><tbody id="dealsBySourceTable">
-      <tr><td colspan="3" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr>
-    </tbody></table>
+  <div class="g2">
+    <div class="card"><h3>AI Referral deals — June 2026</h3>
+      <table class="bmt"><thead><tr><th>#</th><th>Company</th><th>Value</th><th>Date</th></tr></thead><tbody>
+        <tr><td>1</td><td>LNF Holdings</td><td class="cur">R1,410</td><td>26 Jun</td></tr>
+        <tr><td>2</td><td>LNF Holdings</td><td class="cur">R3,124</td><td>26 Jun</td></tr>
+        <tr><td>3</td><td>P&amp;D Bemarking (Pty) Ltd</td><td class="cur">R1,510</td><td>18 Jun</td></tr>
+        <tr><td>4</td><td>Auto Mecca Service Center</td><td class="cur">R888</td><td>23 Jun</td></tr>
+        <tr><td colspan="2"><strong>Total — 4 deals</strong></td><td class="cur"><strong>R6,932</strong></td><td></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><h3>Why AI Referrals matters</h3>
+      <table class="bmt"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
+        <tr><td>Ad spend to generate</td><td class="good"><strong>R0</strong></td></tr>
+        <tr><td>Cost per deal</td><td class="good"><strong>R0</strong></td></tr>
+        <tr><td>ROAS</td><td class="good"><strong>Infinite</strong></td></tr>
+        <tr><td>Month-on-month trend</td><td class="warn">New channel — track monthly</td></tr>
+        <tr><td>Source</td><td>ChatGPT · Google AI · Claude · Perplexity</td></tr>
+      </tbody></table>
+      <div style="background:var(--bbg);border-radius:6px;padding:9px 11px;font-size:11px;color:var(--blue);margin-top:10px;line-height:1.6">
+        <strong>Action:</strong> Business owners are increasingly using AI tools to find compliance services. Ensure every SEESA service page is clearly written with structured content — this is what AI tools surface. This channel will grow without additional spend.
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- WEBSITE TRAFFIC TAB -->
-<div id="tab-website" class="panel">
-  <div class="card"><h3>Google Analytics 4 Dashboard</h3>
-  <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Live GA4 data with top traffic sources, high-performing pages, geographic breakdown, session metrics, and AI platforms isolated (Perplexity, ChatGPT, Gemini, etc.).</p>
-  <a href="https://datastudio.google.com/reporting/4ebba862-42a1-42f1-a8e8-b9e544872c28" target="_blank" class="ga4-link">Open GA4 Dashboard in Looker Studio →</a>
+
+<!-- META LEVELS -->
+<div class="stitle">Meta performance — campaign / ad set / ad</div>
+<div class="note"><strong>Active entities only</strong> for the SEESA account, June 2026 — paused, campaign-paused and ended items are hidden. Switch levels with the tabs: 8 active campaigns, 15 active ad sets, 22 active ads, R40,790 spend on active campaigns. Colour cues use the account benchmarks — CTR <span class="good">≥4% good</span>/<span class="bad">&lt;1.5% weak</span>, CPM <span class="good">&lt;R40 good</span>/<span class="bad">&gt;R80 high</span>, cost/lead <span class="good">≤R250 good</span>/<span class="bad">&gt;R600 high</span>. Rows sorted by spend. (Full-month account spend incl. paused items is R46,723, shown in the Meta channel tab above.)</div>
+<div id="mlvlbox">
+  <div class="ltabs">
+    <div class="ltab on" onclick="showLvl('campaign',this)">Campaign (8)</div>
+    <div class="ltab" onclick="showLvl('adset',this)">Ad set (15)</div>
+    <div class="ltab" onclick="showLvl('ad',this)">Ad (22)</div>
+  </div>
+  <div id='lvl-campaign' class='lpanel on'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody><tr><td class='lvname'>Business Solutions Ad Campaign (printers) - 22 May 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R16,408</td><td class='r'>223,330</td><td class='r '>1.51%</td><td class='r '>R73</td><td class='r'>248</td><td class='r good'>R66</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen</td><td><span class='pill pg'>Active</span></td><td class='r'>R11,626</td><td class='r'>125,322</td><td class='r '>3.05%</td><td class='r bad'>R93</td><td class='r'>259</td><td class='r good'>R45</td></tr>
+<tr><td class='lvname'>Skills Training Leads Gen Campaign - June 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R7,383</td><td class='r'>144,907</td><td class='r '>2.13%</td><td class='r '>R51</td><td class='r'>88</td><td class='r good'>R84</td></tr>
+<tr><td class='lvname'>Labour Campaign - Lead Gen - Instant Form</td><td><span class='pill pg'>Active</span></td><td class='r'>R2,363</td><td class='r'>23,994</td><td class='r '>2.88%</td><td class='r bad'>R98</td><td class='r'>19</td><td class='r good'>R124</td></tr>
+<tr><td class='lvname'>UIF & COID Campaign - June 2026 – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,302</td><td class='r'>49,682</td><td class='r good'>7.11%</td><td class='r good'>R26</td><td class='r'>3</td><td class='r '>R434</td></tr>
+<tr><td class='lvname'>OHS Webinar - 25/05/2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,259</td><td class='r'>33,416</td><td class='r '>3.47%</td><td class='r good'>R38</td><td class='r'>2</td><td class='r bad'>R629</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R392</td><td class='r'>29,795</td><td class='r good'>7.34%</td><td class='r good'>R13</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R57</td><td class='r'>1,739</td><td class='r good'>9.37%</td><td class='r good'>R33</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr class='lvfoot'><td>Total active (8)</td><td></td><td class='r'>R40,790</td><td></td><td></td><td></td><td class='r'>619</td><td></td></tr></tbody></table></div></div>
+  <div id='lvl-adset' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody><tr><td class='lvname'>Business Printing Solutions | Lead Form Ad Set – No Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R11,471</td><td class='r'>159,101</td><td class='r bad'>1.44%</td><td class='r '>R72</td><td class='r'>142</td><td class='r good'>R81</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Ad Set - Ideal Client Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R9,938</td><td class='r'>105,100</td><td class='r '>2.99%</td><td class='r bad'>R95</td><td class='r'>216</td><td class='r good'>R46</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Lead Form Ad Set - Targeted Audience</td><td><span class='pill pg'>Active</span></td><td class='r'>R4,826</td><td class='r'>63,235</td><td class='r '>1.70%</td><td class='r '>R76</td><td class='r'>106</td><td class='r good'>R46</td></tr>
+<tr><td class='lvname'>Skills Training Ad Set - June 2026 - No Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R3,763</td><td class='r'>77,071</td><td class='r '>2.05%</td><td class='r '>R49</td><td class='r'>47</td><td class='r good'>R80</td></tr>
+<tr><td class='lvname'>Skills Training Ad Set - June 2026 - Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R3,620</td><td class='r'>67,836</td><td class='r '>2.22%</td><td class='r '>R53</td><td class='r'>41</td><td class='r good'>R88</td></tr>
+<tr><td class='lvname'>Ad Set 2 - June 2026 - South Africa - Chairing Hearings</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,478</td><td class='r'>17,503</td><td class='r '>2.80%</td><td class='r bad'>R84</td><td class='r'>12</td><td class='r good'>R123</td></tr>
+<tr><td class='lvname'>UIF & COID Ad Set - June 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,302</td><td class='r'>49,682</td><td class='r good'>7.11%</td><td class='r good'>R26</td><td class='r'>3</td><td class='r '>R434</td></tr>
+<tr><td class='lvname'>OHS Webinar Ad Set</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,259</td><td class='r'>33,416</td><td class='r '>3.47%</td><td class='r good'>R38</td><td class='r'>2</td><td class='r bad'>R629</td></tr>
+<tr><td class='lvname'>Ad Set 1 - June 2026 - KZN Only (excl. Newcastle)</td><td><span class='pill pg'>Active</span></td><td class='r'>R884</td><td class='r'>6,491</td><td class='r '>3.11%</td><td class='r bad'>R136</td><td class='r'>7</td><td class='r good'>R126</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Ad Set - Ideal Client Targeting – AI generated ICP and Copywriting</td><td><span class='pill pg'>Active</span></td><td class='r'>R854</td><td class='r'>8,920</td><td class='r good'>4.18%</td><td class='r bad'>R96</td><td class='r'>13</td><td class='r good'>R66</td></tr>
+<tr><td class='lvname'>SBN Campaign - July 2026 - Lead Gen - Ad Set - Lookalike Audience</td><td><span class='pill pg'>Active</span></td><td class='r'>R780</td><td class='r'>10,901</td><td class='r '>2.60%</td><td class='r '>R72</td><td class='r'>29</td><td class='r good'>R27</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R392</td><td class='r'>29,795</td><td class='r good'>7.34%</td><td class='r good'>R13</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Lead Form Ad Set – Ideal Client Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R111</td><td class='r'>994</td><td class='r bad'>1.11%</td><td class='r bad'>R112</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R57</td><td class='r'>1,739</td><td class='r good'>9.37%</td><td class='r good'>R33</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Ad Set - Ideal Client Targeting – Lookalike Audience</td><td><span class='pill pg'>Active</span></td><td class='r'>R54</td><td class='r'>401</td><td class='r good'>4.24%</td><td class='r bad'>R135</td><td class='r'>1</td><td class='r good'>R54</td></tr>
+<tr class='lvfoot'><td>Total active (15)</td><td></td><td class='r'>R40,790</td><td></td><td></td><td></td><td class='r'>619</td><td></td></tr></tbody></table></div></div>
+  <div id='lvl-ad' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody><tr><td class='lvname'>Business Printing Solutions | Static Creative 2 | May 2026 – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R10,848</td><td class='r'>152,045</td><td class='r bad'>1.43%</td><td class='r '>R71</td><td class='r'>138</td><td class='r good'>R79</td></tr>
+<tr><td class='lvname'>SBN Campaign - July 2026 - Lead Gen - Instant Form</td><td><span class='pill pg'>Active</span></td><td class='r'>R9,938</td><td class='r'>105,100</td><td class='r '>2.99%</td><td class='r bad'>R95</td><td class='r'>216</td><td class='r good'>R46</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Static Creative 2 | May 2026 – No credit check option</td><td><span class='pill pg'>Active</span></td><td class='r'>R4,335</td><td class='r'>58,222</td><td class='r '>1.72%</td><td class='r '>R74</td><td class='r'>96</td><td class='r good'>R45</td></tr>
+<tr><td class='lvname'>Skills Training Ad - Labour Inspector Angle - No Targeting</td><td><span class='pill pg'>Active</span></td><td class='r'>R3,057</td><td class='r'>64,383</td><td class='r '>1.96%</td><td class='r '>R47</td><td class='r'>40</td><td class='r good'>R76</td></tr>
+<tr><td class='lvname'>Skills Training Ad - SDL Claims - Targeting – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,902</td><td class='r'>35,183</td><td class='r '>2.31%</td><td class='r '>R54</td><td class='r'>23</td><td class='r good'>R83</td></tr>
+<tr><td class='lvname'>OHS Webinar</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,259</td><td class='r'>33,416</td><td class='r '>3.47%</td><td class='r good'>R38</td><td class='r'>2</td><td class='r bad'>R629</td></tr>
+<tr><td class='lvname'>UIF & COID Ad - June 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,172</td><td class='r'>45,491</td><td class='r good'>7.40%</td><td class='r good'>R26</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Chairing Hearings - Static Image 2 - Instant Form – Copy 2</td><td><span class='pill pg'>Active</span></td><td class='r'>R1,141</td><td class='r'>13,867</td><td class='r '>2.73%</td><td class='r bad'>R82</td><td class='r'>10</td><td class='r good'>R114</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Instant Form - AI generated ICP and Creative</td><td><span class='pill pg'>Active</span></td><td class='r'>R846</td><td class='r'>8,883</td><td class='r good'>4.20%</td><td class='r bad'>R95</td><td class='r'>13</td><td class='r good'>R65</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Instant Form – Enhancements</td><td><span class='pill pg'>Active</span></td><td class='r'>R780</td><td class='r'>10,901</td><td class='r '>2.60%</td><td class='r '>R72</td><td class='r'>29</td><td class='r good'>R27</td></tr>
+<tr><td class='lvname'>Employment Contracts - Static Image 2 - Instant Form – Copy 2</td><td><span class='pill pg'>Active</span></td><td class='r'>R651</td><td class='r'>3,980</td><td class='r '>2.99%</td><td class='r bad'>R164</td><td class='r'>4</td><td class='r good'>R163</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R392</td><td class='r'>29,795</td><td class='r good'>7.34%</td><td class='r good'>R13</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Employment Contracts - Static Image 1 - Instant Form – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R133</td><td class='r'>1,234</td><td class='r '>3.32%</td><td class='r bad'>R108</td><td class='r'>1</td><td class='r good'>R133</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Static Creative 4 | July 2026 – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R63</td><td class='r'>553</td><td class='r bad'>1.08%</td><td class='r bad'>R114</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Event: SEESA Jozi Triathlon 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R57</td><td class='r'>1,739</td><td class='r good'>9.37%</td><td class='r good'>R33</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Instant Form -Ad Creative 1 - July 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R44</td><td class='r'>330</td><td class='r '>3.94%</td><td class='r bad'>R133</td><td class='r'>1</td><td class='r good'>R44</td></tr>
+<tr><td class='lvname'>Chairing Hearings - Static Image - Instant Form</td><td><span class='pill pg'>Active</span></td><td class='r'>R40</td><td class='r'>420</td><td class='r '>3.81%</td><td class='r bad'>R95</td><td class='r'>1</td><td class='r good'>R40</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Image Creative 1 | July 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R37</td><td class='r'>323</td><td class='r bad'>0.62%</td><td class='r bad'>R116</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>SBN Campaign - May 2026 - Lead Gen - Instant Form -Ad Creative 2 - July 2026 – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R10</td><td class='r'>71</td><td class='r good'>5.63%</td><td class='r bad'>R142</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Image 2 Creative | July 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R10</td><td class='r'>93</td><td class='r '>2.15%</td><td class='r bad'>R103</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>SBN Campaign - July 2026 2026 - Lead Gen - Instant Form - AI generated ICP and Creative – Copy</td><td><span class='pill pg'>Active</span></td><td class='r'>R8</td><td class='r'>37</td><td class='r bad'>0.00%</td><td class='r bad'>R212</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr><td class='lvname'>Business Printing Solutions | Static Creative 3 | July 2026</td><td><span class='pill pg'>Active</span></td><td class='r'>R1</td><td class='r'>25</td><td class='r good'>4.00%</td><td class='r '>R60</td><td class='r'>0</td><td class='r '>—</td></tr>
+<tr class='lvfoot'><td>Total active (22)</td><td></td><td class='r'>R36,724</td><td></td><td></td><td></td><td class='r'>574</td><td></td></tr></tbody></table></div></div>
+</div>
+
+  <div class="stitle">Individual campaigns — verdicts &amp; recommendations</div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">Skills Training — lead gen<span class="ptag sact">Active</span></div><div class="cs">Core SEESA product · SDL compliance</div></div><span class="pill pg">Scale</span></div>
+    <div class="sbar"><div class="sf" style="width:16%;background:#22c55e"></div></div>
+    <div class="mets"><div class="m"><div class="mv good">2.18%</div><div class="ml">CTR</div></div><div class="m"><div class="mv warn">R50.95</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R83.89</div><div class="ml">CPL</div></div><div class="m"><div class="mv">88</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R7,382</div><div class="ml">Spend</div></div></div>
+    <p class="vt">The only campaign improving on every metric week-over-week. CTR up from 1.81%, CPL down from R100, leads up from 24 to 88. Core product with strong employer demand. CPM at R50.95 leaves room to scale without hitting the R70 warning threshold.</p>
+    <div class="ac">→ Increase budget 20% (to approx R8,860/month). Test new creative: "Skills levy due? Make sure your training counts."</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">Business Solutions<span class="ptag sact">Active</span></div><div class="cs">SEESA Business Solutions retainer product</div></div><span class="pill pa">Watch — improve creative</span></div>
+    <div class="sbar"><div class="sf" style="width:35%;background:#f59e0b"></div></div>
+    <div class="mets"><div class="m"><div class="mv bad">1.51%</div><div class="ml">CTR</div></div><div class="m"><div class="mv warn">R73.47</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R66.16</div><div class="ml">CPL</div></div><div class="m"><div class="mv">248</div><div class="ml">Leads</div></div><div class="m"><div class="mv bad">R16,407</div><div class="ml">Spend</div></div></div>
+    <p class="vt">Business Solutions deals ARE retainer deals — confirmed via HubSpot line items. This campaign generated 8 closed-won Business Solutions deals in June worth R8,218. Cost per deal: R2,051 — within the acceptable R2,000–R4,000 benchmark. LTV ROAS ~6x. The economics are sound. The problem is creative performance — CTR of 1.51% is below the 2% threshold, meaning better creative could deliver the same deal volume at lower cost. Do not pause. Improve the creative.</p>
+    <div class="ac">→ Keep running. Test new creative with a cost-savings hook: "Cut office costs without cutting corners." A stronger creative could push CTR above 2% and reduce CPM below R60.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">SBN Campaign<span class="ptag sact">Active</span></div><div class="cs">SEESA Business Network — verify deal conversion</div></div><span class="pill pr">Pause — investigate</span></div>
+    <div class="sbar"><div class="sf" style="width:25%;background:#ef4444"></div></div>
+    <div class="mets"><div class="m"><div class="mv good">3.05%</div><div class="ml">CTR</div></div><div class="m"><div class="mv bad">R92.77</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R44.89</div><div class="ml">CPL</div></div><div class="m"><div class="mv">259</div><div class="ml">Leads</div></div><div class="m"><div class="mv bad">R11,626</div><div class="ml">Spend</div></div></div>
+    <p class="vt">CPM at R92.77 is critically high and worsening week-on-week. Despite decent CTR and a cheap CPL, 259 leads from a campaign at this CPM is expensive. Before spending another rand, check how many SBN leads from June converted to closed-won deals in HubSpot. If conversion is below 15%, stop permanently.</p>
+    <div class="ac">→ Pause this week. Pull SBN closed-won deals from HubSpot for June. If below 5 deals, stop. If above 10 deals, rebuild with broader audience to fix CPM.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">Labour Law — instant form<span class="ptag sact">Active</span></div><div class="cs">Core product · most important campaign</div></div><span class="pill pa">Watch — fix CPM</span></div>
+    <div class="sbar"><div class="sf" style="width:5%;background:#f59e0b"></div></div>
+    <div class="mets"><div class="m"><div class="mv good">2.68%</div><div class="ml">CTR</div></div><div class="m"><div class="mv bad">R98.48</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R124.35</div><div class="ml">CPL</div></div><div class="m"><div class="mv">19</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R2,363</div><div class="ml">Spend</div></div></div>
+    <p class="vt">Good CTR and acceptable CPL but CPM at R98 is near the red flag threshold. Budget was scaled 6x last month which pushed ads into more competitive auction slots. Broaden targeting to bring CPM down before scaling further.</p>
+    <div class="ac">→ Enable Advantage+ Audience or remove one targeting layer. If CPM drops below R70 within 7 days, increase budget by 20%.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">UIF &amp; COID — June copy<span class="ptag sact">Active</span></div><div class="cs">Core product · form/page broken</div></div><span class="pill pb">Investigate urgently</span></div>
+    <div class="sbar"><div class="sf" style="width:3%;background:#2a78d6"></div></div>
+    <div class="mets"><div class="m"><div class="mv good">7.11%</div><div class="ml">CTR</div></div><div class="m"><div class="mv good">R26.21</div><div class="ml">CPM</div></div><div class="m"><div class="mv bad">R434</div><div class="ml">CPL</div></div><div class="m"><div class="mv bad">3</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R1,302</div><div class="ml">Spend</div></div></div>
+    <p class="vt">Best CTR (7.11%) and lowest CPM (R26.21) in the entire account. The ad is working perfectly. Only 3 leads from 3,532 clicks = 0.08% click-to-lead. The landing page or lead form is broken. Fix it and this becomes your best campaign.</p>
+    <div class="ac">→ Open this ad on your phone right now and click through. Check if the form loads correctly on mobile and matches the ad's message. Fix the form, then scale to R3,000/week.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">UIF &amp; COID — WhatsApp form<span class="ptag spau">Paused</span></div><div class="cs">WhatsApp lead destination test</div></div><span class="pill pa">Reactivate — test</span></div>
+    <div class="mets"><div class="m"><div class="mv good">2.54%</div><div class="ml">CTR</div></div><div class="m"><div class="mv bad">R114.79</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R102.88</div><div class="ml">CPL</div></div><div class="m"><div class="mv">29</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R2,983</div><div class="ml">Spend</div></div></div>
+    <p class="vt">WhatsApp is a strong lead format for South African B2B. CPM is high at R114 but CPL at R102 is within benchmark. Reactivate at lower daily budget with broader audience to fix CPM.</p>
+    <div class="ac">→ Reactivate at R100/day with broader targeting. If CPM drops below R80 after 7 days, maintain. If not, pause again.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">PAIA / CP&amp;POPI<span class="ptag spau">Paused</span></div><div class="cs">Ongoing annual compliance obligation</div></div><span class="pill pa">Reactivate — update creative</span></div>
+    <div class="mets"><div class="m"><div class="mv good">2.84%</div><div class="ml">CTR</div></div><div class="m"><div class="mv warn">R77.20</div><div class="ml">CPM</div></div><div class="m"><div class="mv good">R92.39</div><div class="ml">CPL</div></div><div class="m"><div class="mv">32</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R2,957</div><div class="ml">Spend</div></div></div>
+    <p class="vt">Good metrics across the board. Remove deadline-specific language and reactivate as an evergreen compliance campaign. PAIA is an ongoing annual obligation — there is always a relevant angle.</p>
+    <div class="ac">→ Update creative to "Is your business PAIA compliant? Most aren't." Reactivate at R3,000/month.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">OHS Webinar — 25 May<span class="ptag sact">Active</span></div><div class="cs">Webinar event — date has passed</div></div><span class="pill pr">Pause — event is over</span></div>
+    <div class="mets"><div class="m"><div class="mv good">3.47%</div><div class="ml">CTR</div></div><div class="m"><div class="mv good">R37.67</div><div class="ml">CPM</div></div><div class="m"><div class="mv bad">R629</div><div class="ml">CPL</div></div><div class="m"><div class="mv bad">2</div><div class="ml">Leads</div></div><div class="m"><div class="mv">R1,259</div><div class="ml">Spend</div></div></div>
+    <p class="vt">The webinar was on 25 May — this is running for a past event. Save the creative and audience data. 3.47% CTR and R37 CPM tell you the OHS audience is highly engaged and cheap to reach. Use it again for the next OHS event.</p>
+    <div class="ac">→ Pause immediately. Archive creative and audience for next OHS event.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">Foreign Nationals Webinar — July<span class="ptag sact">Active</span></div><div class="cs">Just launched — learning phase</div></div><span class="pill pn">Too early</span></div>
+    <p class="vt">Launched 1 July. Only 24 impressions. Do not touch for 7 days. Early signals (CTR 4.17%, CPM R18) are promising but based on almost no data. Check Friday.</p>
+    <div class="ac">→ Do nothing. Confirm GoToWebinar registration page loads correctly on mobile.</div>
+  </div>
+
+  <div class="camp">
+    <div class="ctop"><div><div class="cn">Jozi Triathlon — brand<span class="ptag sact">Active</span></div><div class="cs">Brand awareness · event promotion</div></div><span class="pill pg">On track</span></div>
+    <div class="mets"><div class="m"><div class="mv good">7.34%</div><div class="ml">CTR</div></div><div class="m"><div class="mv good">R13.15</div><div class="ml">CPM</div></div><div class="m"><div class="mv neu">—</div><div class="ml">CPL</div></div><div class="m"><div class="mv">2,350</div><div class="ml">Clicks</div></div><div class="m"><div class="mv">R449</div><div class="ml">Spend</div></div></div>
+    <p class="vt">Exceptional brand signals — 7.34% CTR, R13.15 CPM. No leads expected. Build a lookalike audience from this campaign's engagers and test it on the Labour Law campaign to lower CPM.</p>
+    <div class="ac">→ Keep running. Build Triathlon engager lookalike audience and test on Labour Law campaign.</div>
+  </div>
+
+<!-- DEALS BY PRODUCT x CHANNEL -->
+<div class="stitle">Deals by product &times; channel — June 2026</div>
+<div class="note">
+<strong>What this shows:</strong> every June closed-won deal (64 total, R86,342) mapped to its SEESA product (from HubSpot deal line items) and the channel that sourced it (HubSpot attribution). <strong>Cells are coloured by deal value</strong> — <span style="color:#b85c00;font-weight:700">orange = paid channels</span>, <span style="color:#1a2b4a;font-weight:700">navy = organic / free channels</span>. Read a row to see where a product's revenue comes from; read a column to see what a channel actually closes.
+</div>
+
+<div class="note" style="background:var(--rbg);border-color:#e0a0a0;color:#7a1a12">
+<strong>Budget signal:</strong> Labour Law (R25,663) and Skills Training (R17,019) are the two highest-value products — together ~half of all closed-won value — yet <strong>neither closed a single deal from Paid Social</strong>. Meta's 24 Paid Social deals are concentrated in SBN (12 deals, avg R375) and Business Solutions. Organic Search (R24,587, zero ad cost) is the single biggest value channel. <strong>Caveat before reallocating:</strong> this is HubSpot last-touch attribution and UTM tracking only went live 1 Jul — a Meta lead that later converts via another touch loses its Paid Social credit. Treat "zero" as <em>investigate</em>, not <em>cut</em>.
+</div>
+
+<div class="g2">
+  <div class="card"><h3>Deal value by product</h3><div class="prow"><div class="pname">Labour Law</div><div class="pbw"><div class="pb2" style="width:100%;background:var(--navy)"><span class="pbs">R25,663</span></div></div><div class="pval">13 deals</div></div>
+<div class="prow"><div class="pname">Skills Training</div><div class="pbw"><div class="pb2" style="width:66%;background:var(--navy)"><span class="pbs">R17,019</span></div></div><div class="pval">6 deals</div></div>
+<div class="prow"><div class="pname">Business Solutions</div><div class="pbw"><div class="pb2" style="width:45%;background:var(--navy)"><span class="pbs">R11,649</span></div></div><div class="pval">11 deals</div></div>
+<div class="prow"><div class="pname">UIF & COID</div><div class="pbw"><div class="pb2" style="width:44%;background:var(--navy)"><span class="pbs">R11,166</span></div></div><div class="pval">12 deals</div></div>
+<div class="prow"><div class="pname">CP & POPI</div><div class="pbw"><div class="pb2" style="width:39%;background:var(--navy)"><span class="pbs">R9,927</span></div></div><div class="pval">5 deals</div></div>
+<div class="prow"><div class="pname">SBN</div><div class="pbw"><div class="pb2" style="width:21%;background:var(--navy)"><span class="pbs">R5,394</span></div></div><div class="pval">14 deals</div></div>
+<div class="prow"><div class="pname">BEE</div><div class="pbw"><div class="pb2" style="width:12%;background:var(--navy)"><span class="pbs">R3,050</span></div></div><div class="pval">1 deal</div></div>
+<div class="prow"><div class="pname">Connect / Payroll</div><div class="pbw"><div class="pb2" style="width:10%;background:var(--navy)"><span class="pbs">R2,474</span></div></div><div class="pval">2 deals</div></div>
+</div>
+  <div class="card"><h3>Deal value by channel <span style="font-weight:400;color:var(--muted);font-size:10px">(orange = paid)</span></h3><div class="prow"><div class="pname">Organic Search</div><div class="pbw"><div class="pb2" style="width:100%;background:var(--navy)"><span class="pbs">R24,587</span></div></div><div class="pval">10 deals</div></div>
+<div class="prow"><div class="pname">Paid Social</div><div class="pbw"><div class="pb2" style="width:83%;background:var(--orange)"><span class="pbs">R20,360</span></div></div><div class="pval">24 deals</div></div>
+<div class="prow"><div class="pname">Direct Traffic</div><div class="pbw"><div class="pb2" style="width:38%;background:var(--navy)"><span class="pbs">R9,451</span></div></div><div class="pval">4 deals</div></div>
+<div class="prow"><div class="pname">Paid Search</div><div class="pbw"><div class="pb2" style="width:37%;background:var(--orange)"><span class="pbs">R9,101</span></div></div><div class="pval">7 deals</div></div>
+<div class="prow"><div class="pname">Organic Social</div><div class="pbw"><div class="pb2" style="width:34%;background:var(--navy)"><span class="pbs">R8,304</span></div></div><div class="pval">6 deals</div></div>
+<div class="prow"><div class="pname">AI Referrals</div><div class="pbw"><div class="pb2" style="width:28%;background:var(--navy)"><span class="pbs">R6,932</span></div></div><div class="pval">4 deals</div></div>
+<div class="prow"><div class="pname">Referrals</div><div class="pbw"><div class="pb2" style="width:15%;background:var(--navy)"><span class="pbs">R3,623</span></div></div><div class="pval">5 deals</div></div>
+<div class="prow"><div class="pname">Offline</div><div class="pbw"><div class="pb2" style="width:11%;background:var(--navy)"><span class="pbs">R2,716</span></div></div><div class="pval">2 deals</div></div>
+<div class="prow"><div class="pname">Other Campaigns</div><div class="pbw"><div class="pb2" style="width:5%;background:var(--navy)"><span class="pbs">R1,268</span></div></div><div class="pval">2 deals</div></div>
+</div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <h3>Product &times; channel matrix — deals / value</h3>
+  <div style="overflow-x:auto">
+    <table class="mtx">
+      <thead><tr><th class='mxh'>Product</th><th class='mxc-org'>Organic Search</th><th class='mxc-paid'>Paid Social</th><th class='mxc-org'>Direct Traffic</th><th class='mxc-paid'>Paid Search</th><th class='mxc-org'>Organic Social</th><th class='mxc-org'>AI Referrals</th><th class='mxc-org'>Referrals</th><th class='mxc-org'>Offline</th><th class='mxc-org'>Other Campaigns</th><th class='mxt'>Total</th></tr></thead>
+      <tbody>
+<tr><td class='mxp'>Labour Law</td><td class='mxcell' style='background:rgba(26,43,74,.62);color:#fff'><b>2</b><span>R4,681</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.90);color:#fff'><b>2</b><span>R6,971</span></td><td class='mxcell' style='background:rgba(229,90,28,.62);color:#fff'><b>2</b><span>R3,909</span></td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>2</b><span>R2,553</span></td><td class='mxcell' style='background:rgba(26,43,74,.62);color:#fff'><b>3</b><span>R5,522</span></td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R1,094</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R933</span></td><td class='mxtot'><b>13</b><span>R25,663</span></td></tr>
+<tr><td class='mxp'>Skills Training</td><td class='mxcell' style='background:rgba(26,43,74,.90);color:#fff'><b>3</b><span>R13,253</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>1</b><span>R2,190</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>2</b><span>R1,576</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>6</b><span>R17,019</span></td></tr>
+<tr><td class='mxp'>Business Solutions</td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(229,90,28,.90);color:#fff'><b>8</b><span>R8,218</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(229,90,28,.16);color:#7a3c00'><b>1</b><span>R715</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>2</b><span>R2,716</span></td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>11</b><span>R11,649</span></td></tr>
+<tr><td class='mxp'>UIF & COID</td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>2</b><span>R1,940</span></td><td class='mxcell' style='background:rgba(229,90,28,.16);color:#7a3c00'><b>2</b><span>R1,258</span></td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R290</span></td><td class='mxcell' style='background:rgba(229,90,28,.34);color:#7a3c00'><b>2</b><span>R1,710</span></td><td class='mxcell' style='background:rgba(26,43,74,.62);color:#fff'><b>2</b><span>R4,680</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>2</b><span>R953</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R335</span></td><td class='mxtot'><b>12</b><span>R11,166</span></td></tr>
+<tr><td class='mxp'>CP & POPI</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R1,064</span></td><td class='mxcell' style='background:rgba(229,90,28,.90);color:#fff'><b>2</b><span>R6,389</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(229,90,28,.16);color:#7a3c00'><b>1</b><span>R1,064</span></td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R1,410</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>5</b><span>R9,927</span></td></tr>
+<tr><td class='mxp'>SBN</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R599</span></td><td class='mxcell' style='background:rgba(229,90,28,.62);color:#fff'><b>12</b><span>R4,495</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R300</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>14</b><span>R5,394</span></td></tr>
+<tr><td class='mxp'>BEE</td><td class='mxcell' style='background:rgba(26,43,74,.34);color:#1a2b4a'><b>1</b><span>R3,050</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>1</b><span>R3,050</span></td></tr>
+<tr><td class='mxp'>Connect / Payroll</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell' style='background:rgba(229,90,28,.34);color:#7a3c00'><b>1</b><span>R1,703</span></td><td class='mxcell' style='background:rgba(26,43,74,.14);color:#1a2b4a'><b>1</b><span>R771</span></td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxcell mxempty'>·</td><td class='mxtot'><b>2</b><span>R2,474</span></td></tr>
+      <tr class="mxfootrow"><td class='mxp mxpb'>All products</td><td class='mxcell mxfoot'><b>10</b><span>R24,587</span></td><td class='mxcell mxfoot'><b>24</b><span>R20,360</span></td><td class='mxcell mxfoot'><b>4</b><span>R9,451</span></td><td class='mxcell mxfoot'><b>7</b><span>R9,101</span></td><td class='mxcell mxfoot'><b>6</b><span>R8,304</span></td><td class='mxcell mxfoot'><b>4</b><span>R6,932</span></td><td class='mxcell mxfoot'><b>5</b><span>R3,623</span></td><td class='mxcell mxfoot'><b>2</b><span>R2,716</span></td><td class='mxcell mxfoot'><b>2</b><span>R1,268</span></td><td class='mxtot mxfoot'><b>64</b><span>R86,342</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:10px;color:var(--muted);margin-top:8px">Each cell: top = number of deals, bottom = combined deal value (ZAR). Product from HubSpot deal line items; channel from HubSpot source attribution. Closed-won deal value totals R86,342 — note this is the sum of HubSpot deal amounts and differs from the R79,975 retainer figure in the header strip (different measure); confirm which should be canonical.</div>
+</div>
+
+<!-- BY PRODUCT -->
+<div class="stitle">Meta ad spend by product (spend-side)</div>
+<div class="pgrid">
+  <div class="pc" style="border-color:#22c55e">
+    <div class="pct">Skills Training</div>
+    <div class="pcs">Meta spend<span>R7,382</span></div>
+    <div class="pcs">Leads<span>88</span></div>
+    <div class="pcs">CPL<span class="good">R84</span></div>
+    <div class="pcs">Verdict<span class="good">Scale</span></div>
+  </div>
+  <div class="pc" style="border-color:#f59e0b">
+    <div class="pct">Business Solutions</div>
+    <div class="pcs">Meta spend<span>R16,407</span></div>
+    <div class="pcs">Meta deals<span>8</span></div>
+    <div class="pcs">Cost per deal<span class="good">R2,051</span></div>
+    <div class="pcs">LTV ROAS<span class="good">~6x</span></div>
+  </div>
+  <div class="pc" style="border-color:#2a78d6">
+    <div class="pct">UIF &amp; COID</div>
+    <div class="pcs">Meta spend<span>R4,285</span></div>
+    <div class="pcs">Best CTR<span class="good">7.11%</span></div>
+    <div class="pcs">Leads<span>32</span></div>
+    <div class="pcs">Form issue<span class="bad">Fix urgently</span></div>
+  </div>
+  <div class="pc" style="border-color:#1a2b4a">
+    <div class="pct">Labour Law</div>
+    <div class="pcs">Meta spend<span>R2,363</span></div>
+    <div class="pcs">Leads<span>19</span></div>
+    <div class="pcs">CPL<span class="good">R124</span></div>
+    <div class="pcs">CPM issue<span class="bad">R98</span></div>
+  </div>
+  <div class="pc" style="border-color:#f59e0b">
+    <div class="pct">SBN</div>
+    <div class="pcs">Meta spend<span>R11,626</span></div>
+    <div class="pcs">Leads<span>259</span></div>
+    <div class="pcs">CPM<span class="bad">R92</span></div>
+    <div class="pcs">Conversion<span class="warn">Unverified</span></div>
+  </div>
+  <div class="pc" style="border-color:#9ca3af">
+    <div class="pct">Foreign Nationals</div>
+    <div class="pcs">Launched<span>1 Jul 2026</span></div>
+    <div class="pcs">Early CTR<span class="good">4.17%</span></div>
+    <div class="pcs">Early CPM<span class="good">R18</span></div>
+    <div class="pcs">Status<span>Learning</span></div>
   </div>
 </div>
+
+<!-- PROVINCE -->
+<div class="stitle">Deals by province — June 2026</div>
+<div class="note">Province pulled from HubSpot (contact state + ip_state fields via SQL). 35 of 64 deals have confirmed province (55% coverage, 65% of revenue). 29 deals unassigned — associated contacts have no province data. Fix: ensure province field in Contact Form 7 maps to HubSpot state property.</div>
+<div class="g2">
+  <div class="card">
+    <h3>Deal count by province</h3>
+    <div class="prow"><div class="pname">Gauteng</div><div class="pbw"><div class="pb2" style="width:100%;background:var(--navy)"><span class="pbs">14 deals</span></div></div><div class="pval">40%</div></div>
+    <div class="prow"><div class="pname">Western Cape</div><div class="pbw"><div class="pb2" style="width:71%;background:var(--navy);opacity:.8"><span class="pbs">10 deals</span></div></div><div class="pval">29%</div></div>
+    <div class="prow"><div class="pname">KwaZulu-Natal</div><div class="pbw"><div class="pb2" style="width:36%;background:var(--orange)"><span class="pbs">5 deals</span></div></div><div class="pval">14%</div></div>
+    <div class="prow"><div class="pname">Free State</div><div class="pbw"><div class="pb2" style="width:14%;background:var(--orange);opacity:.7"><span class="pbs">2</span></div></div><div class="pval">6%</div></div>
+    <div class="prow"><div class="pname">Northern Cape</div><div class="pbw"><div class="pb2" style="width:14%;background:#534ab7"><span class="pbs">2</span></div></div><div class="pval">6%</div></div>
+    <div class="prow"><div class="pname">Limpopo</div><div class="pbw"><div class="pb2" style="width:7%;background:#888"><span class="pbs">1</span></div></div><div class="pval">3%</div></div>
+    <div class="prow"><div class="pname">Eastern Cape</div><div class="pbw"><div class="pb2" style="width:7%;background:#888"><span class="pbs">1</span></div></div><div class="pval">3%</div></div>
+    <div class="prow"><div class="pname">Unassigned</div><div class="pbw"><div class="pb2" style="width:0%"></div></div><div class="pval" style="color:#ccc">29</div></div>
+  </div>
+  <div class="card">
+    <h3>Deal value by province (R)</h3>
+    <div class="prow"><div class="pname">Gauteng</div><div class="pbw"><div class="pb2" style="width:100%;background:var(--navy)"><span class="pbs">R24,770</span></div></div><div class="pval">48%</div></div>
+    <div class="prow"><div class="pname">Western Cape</div><div class="pbw"><div class="pb2" style="width:71%;background:var(--navy);opacity:.8"><span class="pbs">R17,632</span></div></div><div class="pval">34%</div></div>
+    <div class="prow"><div class="pname">KwaZulu-Natal</div><div class="pbw"><div class="pb2" style="width:16%;background:var(--orange)"><span class="pbs">R3,980</span></div></div><div class="pval">8%</div></div>
+    <div class="prow"><div class="pname">Free State</div><div class="pbw"><div class="pb2" style="width:8%;background:var(--orange);opacity:.7"><span class="pbs">R2,002</span></div></div><div class="pval">4%</div></div>
+    <div class="prow"><div class="pname">Limpopo</div><div class="pbw"><div class="pb2" style="width:6%;background:#888"><span class="pbs">R1,438</span></div></div><div class="pval">3%</div></div>
+    <div class="prow"><div class="pname">Northern Cape</div><div class="pbw"><div class="pb2" style="width:5%;background:#888"><span class="pbs">R1,430</span></div></div><div class="pval">3%</div></div>
+    <div class="prow"><div class="pname">Eastern Cape</div><div class="pbw"><div class="pb2" style="width:2%;background:#888"></div></div><div class="pval">R599</div></div>
+    <div style="background:var(--ol);border-radius:7px;padding:8px 10px;font-size:11px;color:#7a3c00;margin-top:10px;line-height:1.5">
+      <strong>Western Cape insight:</strong> 34% of confirmed deal value from WC despite only one billboard (Sea Point). Strong organic demand. Consider a dedicated Western Cape Meta campaign.
+    </div>
+  </div>
+</div>
+
+<!-- BENCHMARKS -->
+<div class="stitle">B2B benchmarks — South Africa</div>
+<div class="card" style="margin-bottom:14px">
+  <table class="bmt"><thead><tr><th>Metric</th><th style="color:#0a7c4a">Target</th><th style="color:#b85c00">Acceptable</th><th style="color:#c0271a">Red flag</th></tr></thead><tbody>
+    <tr><td>Meta CTR</td><td class="good">above 4%</td><td class="warn">2–4%</td><td class="bad">below 1.5%</td></tr>
+    <tr><td>Meta CPM</td><td class="good">below R40</td><td class="warn">R40–R70</td><td class="bad">above R80</td></tr>
+    <tr><td>Cost per lead</td><td class="good">R150–R250</td><td class="warn">R250–R400</td><td class="bad">above R600</td></tr>
+    <tr><td>Cost per deal</td><td class="good">R800–R2,000</td><td class="warn">R2,000–R4,000</td><td class="bad">above R6,000</td></tr>
+    <tr><td>ROAS (first month)</td><td class="good">above 5x</td><td class="warn">3x–5x</td><td class="bad">below 2x</td></tr>
+    <tr><td>Ad frequency</td><td class="good">below 3</td><td class="warn">3–5</td><td class="bad">above 6</td></tr>
+  </tbody></table>
+</div>
+
 
 <!-- BILLBOARDS -->
-<div class="stitle">Billboards — active sites</div>
+<div class="stitle">Billboards — active sites (June 2026)</div>
 <div class="note" style="background:var(--rbg);border-color:#e0a0a0;color:#7a1a12">
-<strong>Renewal flag:</strong> the <strong>SB Outdoor</strong> contract (5 sites, R25,000/mo excl VAT) <strong>expires 31 July 2026</strong>. Decision needed before end of July.
+<strong>Renewal flag:</strong> the <strong>SB Outdoor</strong> contract (5 sites, R25,000/mo excl VAT) <strong>expires 31 July 2026</strong>. Without renewal, active billboards drop from <strong>9 → 4</strong> in August, and Bloemfontein, Pietermaritzburg and Sea Point lose their only outdoor presence. Decision needed before end of July.
 </div>
 <div class="krow">
-  <div class="kpi ac"><div class="kl">Active sites</div><div class="kv">9</div><div class="ks neu">2 contracts</div></div>
+  <div class="kpi ac"><div class="kl">Active sites (June)</div><div class="kv">9</div><div class="ks neu">2 contracts overlapping</div></div>
   <div class="kpi ac"><div class="kl">Monthly spend (excl VAT)</div><div class="kv">R65,000</div><div class="ks neu">R74,750 incl VAT</div></div>
   <div class="kpi ac"><div class="kl">SB Outdoor</div><div class="kv warn">Ends 31 Jul</div><div class="ks warn">5 sites · R25,000/mo</div></div>
   <div class="kpi ac"><div class="kl">BrandIQ</div><div class="kv good">Ends 31 Oct</div><div class="ks neu">4 sites · R40,000/mo</div></div>
 </div>
+<div class="g2">
+  <div class="card">
+    <h3>SB Outdoor — 5 sites <span style="font-weight:400;color:var(--red);font-size:10px">· expires 31 Jul 2026</span></h3>
+    <table class="bmt"><thead><tr><th>Location</th><th>Size</th><th>Rate/mo (excl VAT)</th></tr></thead>
+    <tbody><tr><td>Bloemfontein — Nelson Mandela Drive</td><td class="neu">3m × 6m</td><td class="cur">R5,000</td></tr>
+<tr><td>Bedfordview — Van Buuren Rd</td><td class="neu">3m × 6m</td><td class="cur">R5,000</td></tr>
+<tr><td>Sefako Makgatho</td><td class="neu">3m × 6m</td><td class="cur">R5,000</td></tr>
+<tr><td>Pietermaritzburg — Woodburn Square</td><td class="neu">3m × 6m</td><td class="cur">R5,000</td></tr>
+<tr><td>Sea Point (relocated from Somerset West)</td><td class="neu">3m × 6m</td><td class="cur">R5,000</td></tr>
+<tr><td colspan="2"><strong>Total</strong></td><td class="cur"><strong>R25,000</strong></td></tr></tbody></table>
+  </div>
+  <div class="card">
+    <h3>BrandIQ — 4 sites <span style="font-weight:400;color:var(--muted);font-size:10px">· expires 31 Oct 2026</span></h3>
+    <table class="bmt"><thead><tr><th>Location</th><th>Size</th><th>Rate/mo (excl VAT)</th></tr></thead>
+    <tbody><tr><td>R21 Highway — Kempton Park</td><td class="neu">4m × 16m LED</td><td class="cur">R15,000</td></tr>
+<tr><td>N1 Freeway — Centurion / Brakfontein</td><td class="neu">4.5m × 18m LED</td><td class="cur">R15,000</td></tr>
+<tr><td>Atterbury Road — Menlyn</td><td class="neu">4m × 8m LED</td><td class="cur">R5,000</td></tr>
+<tr><td>Lynnwood Road — Die Wilgers</td><td class="neu">3m × 6m LED</td><td class="cur">R5,000</td></tr>
+<tr><td colspan="2"><strong>Total</strong></td><td class="cur"><strong>R40,000</strong></td></tr></tbody></table>
+  </div>
+</div>
 
 <!-- EVENTS -->
 <div class="stitle">Events &amp; webinars</div>
-<div class="note">SEESA brand event calendar 2026 + campaign-linked webinars with Meta ad spend.</div>
+<div class="note">Two views: the <strong>SEESA brand event calendar</strong> (from the 2026 calendar on file) and the <strong>campaign-linked webinars</strong> that tie directly to Meta ad spend on this dashboard. No brand event falls inside June — Nampo (May) was the prior major event and Bulls Golf Day (8 Jul) is next.</div>
 <div class="g2">
   <div class="card">
     <h3>SEESA event calendar — 2026</h3>
     <table class="bmt"><thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Status</th></tr></thead><tbody>
-<tr><td><strong>Nampo</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Past — May major event</div></td><td class="neu">11–16 May 2026</td><td class="neu">Bothaville</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#f1f5f9;color:#475569">Past</span></td></tr>
-<tr><td><strong>Bulls Golf Day</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Next up</div></td><td class="neu">08 July 2026</td><td class="neu">Pretoria</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#fef4e8;color:#b85c00">Next up</span></td></tr>
-<tr><td><strong>SEESA Jozi Triathlon</strong></td><td class="neu">26 September 2026</td><td class="neu">Benoni</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#e6f1fb;color:#185fa5">Upcoming</span></td></tr>
+<tr><td><strong>Nampo</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Past — May major event</div></td><td class="neu">11–16 May 2026</td><td class="neu">Bothaville</td><td><span class="pill pn">Past</span></td></tr>
+<tr><td><strong>Future of Work Conference</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Date TBC</div></td><td class="neu">? July 2026</td><td class="neu">East London</td><td><span class="pill pb">Upcoming</span></td></tr>
+<tr><td><strong>Bulls Golf Day</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Next up</div></td><td class="neu">08 July 2026</td><td class="neu">Pretoria</td><td><span class="pill pa">Next up</span></td></tr>
+<tr><td><strong>Around The Pot</strong></td><td class="neu">01 August 2026</td><td class="neu">Swellendam</td><td><span class="pill pb">Upcoming</span></td></tr>
+<tr><td><strong>SEESA Wine Tasting</strong></td><td class="neu">03 September 2026</td><td class="neu">Pretoria</td><td><span class="pill pb">Upcoming</span></td></tr>
+<tr><td><strong>SEESA Jozi Triathlon</strong></td><td class="neu">26 September 2026</td><td class="neu">Benoni</td><td><span class="pill pb">Upcoming</span></td></tr>
+<tr><td><strong>Meiringspoort 21km</strong></td><td class="neu">10 October 2026</td><td class="neu">De Rust</td><td><span class="pill pb">Upcoming</span></td></tr>
     </tbody></table>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">Source: SEESA Event Calendar 2026/2027. NMC 2027 (27–29 Jan 2027, Gauteng) closes the cycle.</div>
   </div>
   <div class="card">
     <h3>Campaign webinars <span style="font-weight:400;color:var(--muted);font-size:10px">(ad-linked)</span></h3>
     <table class="bmt"><thead><tr><th>Webinar</th><th>Date</th><th>Status</th></tr></thead><tbody>
-      <tr><td><strong>UIF &amp; COID Webinar</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">presenter Jodie Schultz</div></td><td>9 Jul 2026</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#e6f1fb;color:#185fa5">Upcoming</span></td></tr>
-      <tr><td><strong>Foreign Nationals / Labour Inspector</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">in learning phase</div></td><td>Live · 1 Jul</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#eaf5f0;color:#0a7c4a">Live</span></td></tr>
+      <tr><td><strong>OHS Webinar</strong></td><td>25 May 2026</td><td><span class="pill pn">Past</span></td></tr>
+      <tr><td><strong>UIF &amp; COID Webinar</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">presenter Jodie Schultz</div></td><td>9 Jul 2026</td><td><span class="pill pb">Upcoming</span></td></tr>
+      <tr><td><strong>Foreign Nationals / Labour Inspector</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">in learning phase</div></td><td>Live · 1 Jul</td><td><span class="pill pg">Live</span></td></tr>
     </tbody></table>
+    <div style="background:var(--abg);border-radius:6px;padding:8px 10px;font-size:11px;color:#7a3c00;margin-top:10px;line-height:1.5"><strong>Tie-in:</strong> the UIF &amp; COID webinar (9 Jul) lands as that campaign — best CTR/CPM in the account — needs its broken form fixed. Fix it before the webinar to capture the demand.</div>
   </div>
 </div>
-
 </div>
-
-</div>
-
-<div class="ft">SEESA (Pty) Ltd · Ads Dashboard · Live Data · Meta (live) · HubSpot (live) · Google & Microsoft (est.) · Internal use only</div>
+</div><!-- dashContent -->
+<div class="ft">SEESA (Pty) Ltd · Ads Dashboard · Live · Meta (live) · HubSpot (live) · Internal use only</div>
 
 <script>
 function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(today.getTime()-30*24*60*60*1000);document.getElementById('startDate').valueAsDate=thirtyDaysAgo;document.getElementById('endDate').valueAsDate=today;}
-
-function setDateRange(range){const today=new Date();let start;if(range==='last7'){start=new Date(today.getTime()-7*24*60*60*1000);}else if(range==='lastMonth'){start=new Date(today.getTime()-30*24*60*60*1000);}
-document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
-
-async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){showError('Please select both start and end dates');return;}
-document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';document.getElementById('error').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok){throw new Error(data.error||'Failed to fetch data');}
-populateDashboard(data);document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){showError(err.message);document.getElementById('loading').style.display='none';}}
-
-function populateDashboard(data){const{meta,hubspot}=data;document.getElementById('badge').textContent=`${data.dateRange.startDate} to ${data.dateRange.endDate}`;document.getElementById('metaSpend').textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('metaSpendContext').textContent=`${data.dateRange.startDate} to ${data.dateRange.endDate}`;document.getElementById('metaLeads').textContent=meta.totalLeads;document.getElementById('totalDeals').textContent=hubspot.totalDeals;document.getElementById('totalDealValue').textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('aiDeals').textContent=(hubspot.dealsBySource['AI_REFERRALS']||0);document.getElementById('aiDealCount').textContent=(hubspot.dealsBySource['AI_REFERRALS']||0);document.getElementById('aiDealValue').textContent=`R${((hubspot.dealsBySource['AI_REFERRALS']||0)*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;const campaignRows=meta.campaigns.map(c=>`<tr><td>${c.name||'—'}</td><td style="color:${c.effective_status==='ACTIVE'?'var(--green)':'var(--amber)'}; font-weight:600">${c.effective_status||'—'}</td><td class="cur">${c.amount_spent||'—'}</td><td>${c.impressions?`${(parseInt(c.impressions)/1000).toFixed(0)}K`:'-'}</td><td>${c.ctr||'—'}</td><td>${c.cpm||'—'}</td><td>${c.results?.value||'—'}</td><td>${c.cost_per_result||'—'}</td></tr>`).join('');document.getElementById('metaCampaignsTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No campaigns for this date range</td></tr>';const dealRows=Object.entries(hubspot.dealsBySource).map(([source,count])=>{const dealMap={'PAID_SOCIAL':'Paid Social','ORGANIC_SEARCH':'Organic Search','DIRECT_TRAFFIC':'Direct Traffic','PAID_SEARCH':'Paid Search','ORGANIC_SOCIAL':'Organic Social','AI_REFERRALS':'AI Referrals','REFERRALS':'Referrals','OFFLINE':'Offline','OTHER_CAMPAIGNS':'Other'};return`<tr><td>${dealMap[source]||source}</td><td class="cur">${count}</td><td class="cur">—</td></tr>`}).join('');document.getElementById('dealsBySourceTable').innerHTML=dealRows||'<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:20px">No deals</td></tr>';}
-
-function showTab(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('tab-'+id).classList.add('on');el.classList.add('on');}
-
-function showError(message){const errorDiv=document.getElementById('error');errorDiv.textContent=message;errorDiv.style.display='block';document.getElementById('loading').style.display='none';}
-
+function setDateRange(range){const today=new Date();let start=new Date(today.getTime()-(range==='last7'?7:30)*24*60*60*1000);document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
+async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){alert('Select both dates');return;}document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok)throw new Error(data.error);console.log('Data loaded');document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){alert('Error: '+err.message);document.getElementById('loading').style.display='none';}}
 setDefaultDates();
+
+function showTab(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  el.classList.add('on');
+}
+const camps=['Business\nSolutions','SBN','Skills\nTraining','UIF\n(WhatsApp)','PAIA','Labour\nLaw','UIF\nCopy','OHS\nWebinar'];
+const spend=[16407,11626,7382,2983,2957,2363,1302,1259];
+const leads=[248,259,88,29,32,19,3,2];
+const cpls=[66,45,84,103,92,124,434,629];
+const cols=['#f59e0b','#ef4444','#22c55e','#f59e0b','#f59e0b','#1a2b4a','#2a78d6','#ef4444'];
+new Chart(document.getElementById('spendChart'),{type:'bar',data:{labels:camps,datasets:[{label:'Spend',data:spend,backgroundColor:cols,borderRadius:3,yAxisID:'y'},{label:'Leads',data:leads,backgroundColor:cols.map(c=>c+'55'),borderRadius:3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{position:'left',ticks:{callback:v=>'R'+(v/1000).toFixed(0)+'k',font:{size:10}}},y1:{position:'right',grid:{display:false},ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cplChart'),{type:'bar',data:{labels:camps,datasets:[{label:'CPL',data:cpls,backgroundColor:cpls.map(v=>v<=150?'#22c55e':v<=400?'#f59e0b':'#ef4444'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'R'+v,font:{size:10}},max:700},x:{ticks:{font:{size:10}}}}}});
+
+function showLvl(id,el){
+  var box=document.getElementById('mlvlbox');
+  box.querySelectorAll('.lpanel').forEach(function(p){p.classList.remove('on')});
+  box.querySelectorAll('.ltab').forEach(function(t){t.classList.remove('on')});
+  document.getElementById('lvl-'+id).classList.add('on');
+  el.classList.add('on');
+}
+
 </script>
 </body>
 </html>
