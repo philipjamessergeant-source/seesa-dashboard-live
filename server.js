@@ -9,25 +9,60 @@ app.use(express.json());
 const SEESA_META_ACCOUNT = '1326328365076410';
 const SEESA_HUBSPOT_PORTAL = '49403143';
 
-// Helper: fetch Meta Ads data
+// Helper: fetch Meta Ads data BY DATE RANGE using Insights
 async function fetchMetaCampaigns(startDate, endDate) {
   try {
-    // Don't use time_range - just get all campaigns and filter client-side
-    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status,created_time,updated_time&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
+    // Use insights endpoint with date_start and date_stop for proper date filtering
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/insights?fields=campaign_id,campaign_name,spend,impressions,clicks,reach,actions,action_values&date_start=${startDate}&date_stop=${endDate}&breakdowns=campaign_id&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
     
-    console.log('Fetching Meta campaigns (all)');
+    console.log(`Fetching Meta insights from ${startDate} to ${endDate}`);
     const res = await fetch(url);
     const data = await res.json();
-    console.log('Meta response:', data.data ? `${data.data.length} campaigns` : `Error: ${JSON.stringify(data.error)}`);
     
     if (!res.ok || data.error) {
-      console.error('Meta API error:', data.error);
+      console.error('Meta insights error:', data.error);
       return [];
     }
     
-    return data.data || [];
+    // Group by campaign_id to aggregate
+    const campaignMap = {};
+    (data.data || []).forEach(row => {
+      const campId = row.campaign_id;
+      if (!campaignMap[campId]) {
+        campaignMap[campId] = {
+          id: campId,
+          name: row.campaign_name || 'Unknown',
+          amount_spent: 0,
+          impressions: 0,
+          clicks: 0,
+          reach: 0,
+          results: 0
+        };
+      }
+      campaignMap[campId].amount_spent += parseFloat(row.spend || 0);
+      campaignMap[campId].impressions += parseInt(row.impressions || 0);
+      campaignMap[campId].clicks += parseInt(row.clicks || 0);
+      campaignMap[campId].reach += parseInt(row.reach || 0);
+      
+      // Actions (results/leads)
+      if (row.actions && Array.isArray(row.actions)) {
+        const leadAction = row.actions.find(a => a.action_type === 'lead');
+        if (leadAction) campaignMap[campId].results += parseInt(leadAction.value || 0);
+      }
+    });
+    
+    const campaigns = Object.values(campaignMap).map(c => ({
+      ...c,
+      effective_status: 'ACTIVE', // insights only returns active campaigns with spend
+      ctr: c.impressions > 0 ? `${((c.clicks / c.impressions) * 100).toFixed(2)}%` : '—',
+      cpm: c.impressions > 0 ? `R${(c.amount_spent / (c.impressions / 1000)).toFixed(2)}` : '—',
+      cost_per_result: c.results > 0 ? `R${(c.amount_spent / c.results).toFixed(2)}` : '—'
+    }));
+    
+    console.log(`Fetched ${campaigns.length} campaigns with spend for ${startDate} to ${endDate}`);
+    return campaigns;
   } catch (err) {
-    console.error('Meta API error:', err);
+    console.error('Meta insights error:', err);
     return [];
   }
 }
