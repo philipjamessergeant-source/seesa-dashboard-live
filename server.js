@@ -12,12 +12,19 @@ const SEESA_HUBSPOT_PORTAL = '49403143';
 // Helper: fetch Meta Ads data
 async function fetchMetaCampaigns(startDate, endDate) {
   try {
-    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status&access_token=${process.env.META_ACCESS_TOKEN}&time_range={"since":"${startDate}","until":"${endDate}"}&limit=100`;
+    // Don't use time_range - just get all campaigns and filter client-side
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status,created_time,updated_time&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
     
-    console.log('Fetching Meta campaigns for', startDate, 'to', endDate);
+    console.log('Fetching Meta campaigns (all)');
     const res = await fetch(url);
     const data = await res.json();
     console.log('Meta response:', data.data ? `${data.data.length} campaigns` : `Error: ${JSON.stringify(data.error)}`);
+    
+    if (!res.ok || data.error) {
+      console.error('Meta API error:', data.error);
+      return [];
+    }
+    
     return data.data || [];
   } catch (err) {
     console.error('Meta API error:', err);
