@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEESA Ads Dashboard — Live</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--navy:#1a2b4a;--orange:#e55a1c;--ol:#fef1eb;--slate:#f5f6f8;--bd:#e2e5eb;--text:#1a2b4a;--muted:#6b7a99;--green:#0a7c4a;--gbg:#eaf5f0;--amber:#b85c00;--abg:#fef4e8;--red:#c0271a;--rbg:#fdecea;--blue:#185fa5;--bbg:#e6f1fb;--gray:#4a5568;--gbg2:#f0f1f3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--slate);color:var(--text);font-size:14px}
+.hdr{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:17px;font-weight:600}
+.hdr p{font-size:11px;opacity:.6;margin-top:2px}
+.bdg{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--orange);color:#fff}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;opacity:.7}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px}
+.date-filter{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.date-filter label{font-size:12px;font-weight:600;color:var(--text)}
+.date-filter input{padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:inherit}
+.date-filter button{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted);transition:all 0.2s}
+.date-filter button:hover{color:var(--text)}
+.date-filter button.load{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.date-filter button.load:hover{background:#243d6a}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:16px}
+.kpi .lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi .val{font-size:24px;font-weight:700;color:var(--text)}
+.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.section{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:18px;margin-bottom:18px}
+.section h2{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;border-bottom:2px solid var(--bd)}
+td{padding:9px 10px;border-bottom:1px solid var(--bd);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--slate)}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px}
+.badge.active{background:var(--gbg);color:var(--green)}
+.badge.paused{background:var(--gbg2);color:var(--gray)}
+.empty{text-align:center;color:var(--muted);padding:30px;font-size:13px}
+.loading{text-align:center;color:var(--muted);padding:30px;font-size:13px}
+.err{background:var(--rbg);color:var(--red);border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>SEESA Ads Performance Dashboard</h1>
+    <p>Live data from Meta Ads &amp; HubSpot CRM</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="live"><div class="dot"></div> Live</div>
+    <span class="bdg">SEESA</span>
+  </div>
+</div>
+<div class="wrap">
+  <div class="date-filter">
+    <label>From</label>
+    <input type="date" id="startDate">
+    <label>To</label>
+    <input type="date" id="endDate">
+    <button onclick="setRange(7)">Last 7 Days</button>
+    <button onclick="setRange(30)">Last 30 Days</button>
+    <button onclick="setRange(90)">Last 90 Days</button>
+    <button class="load" onclick="loadData()">Load Data</button>
+  </div>
+
+  <div id="error" class="err" style="display:none"></div>
+
+  <div class="kpis">
+    <div class="kpi">
+      <div class="lbl">Meta Ad Spend</div>
+      <div class="val" id="kpi-spend">—</div>
+      <div class="sub">Total spend in period</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Meta Leads</div>
+      <div class="val" id="kpi-leads">—</div>
+      <div class="sub">Lead form submissions</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Impressions</div>
+      <div class="val" id="kpi-impressions">—</div>
+      <div class="sub">Total ad impressions</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Closed Deals</div>
+      <div class="val" id="kpi-deals">—</div>
+      <div class="sub">HubSpot closed-won</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Deal Value</div>
+      <div class="val" id="kpi-value">—</div>
+      <div class="sub">Total closed-won value</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Meta Campaigns</h2>
+    <div id="campaigns-wrap">
+      <div class="empty">Select a date range and click Load Data</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>HubSpot Deals by Source</h2>
+    <div id="deals-wrap">
+      <div class="empty">Select a date range and click Load Data</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmt(n){return Number(n).toLocaleString('en-ZA',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function fmtInt(n){return Number(n).toLocaleString('en-ZA')}
+
+function setRange(days){
+  const end=new Date();
+  const start=new Date();
+  start.setDate(end.getDate()-days+1);
+  document.getElementById('startDate').value=start.toISOString().slice(0,10);
+  document.getElementById('endDate').value=end.toISOString().slice(0,10);
+}
+
+// Default to last 7 days
+setRange(7);
+
+async function loadData(){
+  const startDate=document.getElementById('startDate').value;
+  const endDate=document.getElementById('endDate').value;
+  const errEl=document.getElementById('error');
+  errEl.style.display='none';
+
+  if(!startDate||!endDate){
+    errEl.textContent='Please select both start and end dates.';
+    errEl.style.display='block';
+    return;
+  }
+
+  document.getElementById('campaigns-wrap').innerHTML='<div class="loading">Loading campaigns…</div>';
+  document.getElementById('deals-wrap').innerHTML='<div class="loading">Loading deals…</div>';
+  ['kpi-spend','kpi-leads','kpi-impressions','kpi-deals','kpi-value'].forEach(id=>{
+    document.getElementById(id).textContent='…';
+  });
+
+  try{
+    const res=await fetch('/api/dashboard-data',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({startDate,endDate})
+    });
+    if(!res.ok) throw new Error('Server error: '+res.status);
+    const data=await res.json();
+
+    // KPIs
+    document.getElementById('kpi-spend').textContent='R '+fmt(data.meta?.totalSpend||0);
+    document.getElementById('kpi-leads').textContent=fmtInt(data.meta?.totalLeads||0);
+    document.getElementById('kpi-impressions').textContent=fmtInt(data.meta?.totalImpressions||0);
+    document.getElementById('kpi-deals').textContent=fmtInt(data.hubspot?.totalDeals||0);
+    document.getElementById('kpi-value').textContent='R '+fmt(data.hubspot?.totalDealValue||0);
+
+    // Campaigns table
+    const campaigns=data.meta?.campaigns||[];
+    if(campaigns.length===0){
+      document.getElementById('campaigns-wrap').innerHTML='<div class="empty">No active campaigns found for this period.</div>';
+    } else {
+      let rows=campaigns.map(c=>`<tr>
+        <td>${c.name||'—'}</td>
+        <td>R ${fmt(c.spend||0)}</td>
+        <td>${fmtInt(c.impressions||0)}</td>
+        <td>${fmtInt(c.clicks||0)}</td>
+        <td>${c.ctr?parseFloat(c.ctr).toFixed(2)+'%':'—'}</td>
+        <td>${c.cpm?'R '+fmt(c.cpm):'—'}</td>
+        <td>${fmtInt(c.leads||0)}</td>
+        <td>${c.cpl&&c.cpl!=='—'?'R '+fmt(c.cpl):'—'}</td>
+        <td><span class="badge active">Active</span></td>
+      </tr>`).join('');
+      document.getElementById('campaigns-wrap').innerHTML=`<table>
+        <thead><tr>
+          <th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th>
+          <th>CTR</th><th>CPM</th><th>Leads</th><th>CPL</th><th>Status</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    }
+
+    // Deals by source table
+    const dealsBySource=data.hubspot?.dealsBySource||{};
+    const sources=Object.entries(dealsBySource).sort((a,b)=>b[1]-a[1]);
+    if(sources.length===0){
+      document.getElementById('deals-wrap').innerHTML='<div class="empty">No closed deals found for this period.</div>';
+    } else {
+      let rows=sources.map(([src,cnt])=>`<tr>
+        <td>${src}</td>
+        <td>${fmtInt(cnt)}</td>
+      </tr>`).join('');
+      document.getElementById('deals-wrap').innerHTML=`<table>
+        <thead><tr><th>Source</th><th>Deals</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    }
+
+  } catch(err){
+    errEl.textContent='Failed to load data: '+err.message;
+    errEl.style.display='block';
+    document.getElementById('campaigns-wrap').innerHTML='<div class="empty">Error loading data.</div>';
+    document.getElementById('deals-wrap').innerHTML='<div class="empty">Error loading data.</div>';
+  }
+}
+</script>
+</body>
+</html>
