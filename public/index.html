@@ -136,11 +136,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="stitle" style="margin-top:4px">Overall — all channels</div>
 <div class="krow">
   <div class="kpi ac"><div class="kl">Total ad spend</div><div class="kv">R71,723</div><div class="ks neu">Meta R46,723 · Google R20k · Microsoft R5k</div></div>
-  <div class="kpi ac"><div class="kl">Total deals closed</div><div class="kv">64</div><div class="ks neu">All sources · June 2026</div></div>
-  <div class="kpi ac"><div class="kl">Total retainer value</div><div class="kv">R79,975</div><div class="ks neu">Monthly debit orders</div></div>
+  <div class="kpi ac"><div class="kl">Total deals closed</div><div class="kv" data-kpi="totalDeals">64</div><div class="ks neu">All sources · June 2026</div></div>
+  <div class="kpi ac"><div class="kl">Total retainer value</div><div class="kv" data-kpi="dealValue">R79,975</div><div class="ks neu">Monthly debit orders</div></div>
   <div class="kpi ac"><div class="kl">Paid deals (ads)</div><div class="kv">31</div><div class="ks neu">Paid Social + Paid Search</div></div>
   <div class="kpi ac"><div class="kl">Paid deal value</div><div class="kv">R36,730</div><div class="ks neu">Meta + Google + Microsoft</div></div>
-  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv">4</div><div class="ks neu">R6,532 value · own channel</div></div>
+  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" data-kpi="aiDeals">4</div><div class="ks neu"><span data-kpi="aiValue">R6,532</span> value · own channel</div></div>
 </div>
 
 <div class="stitle">Performance by channel</div>
@@ -149,14 +149,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="tab" onclick="showTab('google',this)">Google Ads</div>
   <div class="tab" onclick="showTab('microsoft',this)">Microsoft Ads</div>
   <div class="tab" onclick="showTab('aideals',this)">AI Referrals</div>
+  <div class="tab" onclick="showTab('website',this)">Website Traffic</div>
 </div>
 
 <!-- META -->
 <div id="tab-meta" class="panel on">
   <div class="g3">
-    <div class="kpi"><div class="kl">Meta spend</div><div class="kv">R46,723</div><div class="ks warn">+365% vs May (R10,061)</div></div>
-    <div class="kpi"><div class="kl">Paid Social deals</div><div class="kv">24</div><div class="ks neu">R20,360 deal value</div></div>
-    <div class="kpi"><div class="kl">Cost per deal (Meta)</div><div class="kv warn">R1,947</div><div class="ks good">Within R2,000–R4,000 benchmark ✓</div></div>
+    <div class="kpi"><div class="kl">Meta spend</div><div class="kv" data-kpi="metaSpend">R46,723</div><div class="ks warn">+365% vs May (R10,061)</div></div>
+    <div class="kpi"><div class="kl">Paid Social deals</div><div class="kv" data-kpi="paidSocialDeals">24</div><div class="ks neu">R20,360 deal value</div></div>
+    <div class="kpi"><div class="kl">Cost per deal (Meta)</div><div class="kv warn" data-kpi="metaCPD">R1,947</div><div class="ks good">Within R2,000–R4,000 benchmark ✓</div></div>
   </div>
   <div class="g2">
     <div class="card"><h3>Spend vs leads by campaign</h3><div class="cw" style="height:190px"><canvas id="spendChart"></canvas></div></div>
@@ -230,8 +231,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- AI REFERRALS -->
 <div id="tab-aideals" class="panel">
   <div class="g3">
-    <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv">4</div><div class="ks neu">June 2026</div></div>
-    <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv">R6,932</div><div class="ks neu">Monthly retainer value</div></div>
+    <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" data-kpi="aiDeals">4</div><div class="ks neu">June 2026</div></div>
+    <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv" data-kpi="aiValue">R6,932</div><div class="ks neu">Monthly retainer value</div></div>
     <div class="kpi ai"><div class="kl">Cost to acquire</div><div class="kv good">R0</div><div class="ks good">Zero paid spend</div></div>
   </div>
   <div class="g2">
@@ -256,6 +257,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <strong>Action:</strong> Business owners are increasingly using AI tools to find compliance services. Ensure every SEESA service page is clearly written with structured content — this is what AI tools surface. This channel will grow without additional spend.
       </div>
     </div>
+  </div>
+</div>
+
+<!-- WEBSITE TRAFFIC -->
+<div id="tab-website" class="panel">
+  <div class="card">
+    <h3>Google Analytics 4 Dashboard</h3>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Live GA4 data with top traffic sources, high-performing pages, geographic breakdown, session metrics, and AI platforms isolated (Perplexity, ChatGPT, Gemini, Claude, etc.).</p>
+    <a href="https://datastudio.google.com/reporting/4ebba862-42a1-42f1-a8e8-b9e544872c28" target="_blank" style="display:inline-block;background:var(--navy);color:#fff;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer">Open GA4 Dashboard in Looker Studio →</a>
   </div>
 </div>
 
@@ -606,7 +616,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(today.getTime()-30*24*60*60*1000);document.getElementById('startDate').valueAsDate=thirtyDaysAgo;document.getElementById('endDate').valueAsDate=today;}
 function setDateRange(range){const today=new Date();let start=new Date(today.getTime()-(range==='last7'?7:30)*24*60*60*1000);document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
-async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){alert('Select both dates');return;}document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok)throw new Error(data.error);console.log('Data loaded');document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){alert('Error: '+err.message);document.getElementById('loading').style.display='none';}}
+async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){alert('Select both dates');return;}document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok)throw new Error(data.error);populateDashboard(data,startDate,endDate);document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){alert('Error: '+err.message);document.getElementById('loading').style.display='none';}}
+
+function populateDashboard(data,startDate,endDate){const{meta,hubspot}=data;const period=`${startDate} to ${endDate}`;document.querySelectorAll('[data-kpi]').forEach(el=>{const key=el.getAttribute('data-kpi');if(key==='metaSpend')el.textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;else if(key==='paidSocialDeals')el.textContent=hubspot.dealsBySource['PAID_SOCIAL']||0;else if(key==='metaCPD')el.textContent=hubspot.dealsBySource['PAID_SOCIAL']>0?`R${Math.round(meta.totalSpend/(hubspot.dealsBySource['PAID_SOCIAL']||1))}`:'-';else if(key==='totalDeals')el.textContent=hubspot.totalDeals;else if(key==='dealValue')el.textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;else if(key==='aiDeals')el.textContent=hubspot.dealsBySource['AI_REFERRALS']||0;else if(key==='aiValue')el.textContent=`R${((hubspot.dealsBySource['AI_REFERRALS']||0)*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;});}
 setDefaultDates();
 
 function showTab(id,el){
