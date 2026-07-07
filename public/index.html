@@ -1,503 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEESA Ads Dashboard — Live</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <style>
-    :root {
-      --navy: #1a2b4a;
-      --orange: #e55a1c;
-      --ol: #fef1eb;
-      --slate: #f5f6f8;
-      --bd: #e2e5eb;
-      --text: #1a2b4a;
-      --muted: #6b7a99;
-      --green: #0a7c4a;
-      --gbg: #eaf5f0;
-      --amber: #b85c00;
-      --abg: #fef4e8;
-      --red: #c0271a;
-      --rbg: #fdecea;
-      --blue: #185fa5;
-      --bbg: #e6f1fb;
-      --gray: #4a5568;
-      --gbg2: #f0f1f3;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--slate);
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .hdr {
-      background: var(--navy);
-      color: #fff;
-      padding: 16px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .hdr h1 {
-      font-size: 17px;
-      font-weight: 600;
-    }
-
-    .hdr p {
-      font-size: 11px;
-      opacity: 0.6;
-      margin-top: 2px;
-    }
-
-    .bdg {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: var(--orange);
-      color: #fff;
-    }
-
-    .live {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      opacity: 0.7;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #4ade80;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 18px 14px;
-    }
-
-    .date-filter {
-      background: #fff;
-      border-radius: 10px;
-      border: 1px solid var(--bd);
-      padding: 14px;
-      margin-bottom: 18px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .date-filter label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .date-filter input {
-      padding: 8px 12px;
-      border: 1px solid var(--bd);
-      border-radius: 6px;
-      font-size: 13px;
-      font-family: inherit;
-    }
-
-    .date-filter button {
-      padding: 8px 16px;
-      background: var(--navy);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .date-filter button:hover {
-      background: #0f1b2f;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .error {
-      background: var(--rbg);
-      color: var(--red);
-      border: 1px solid #fcc;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 18px;
-      font-size: 12px;
-    }
-
-    .stitle {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 1.25rem 0 0.6rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .stitle::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--bd);
-    }
-
-    .krow {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 9px;
-      margin-bottom: 1.25rem;
-    }
-
-    .kpi {
-      background: #fff;
-      border-radius: 10px;
-      border: 1px solid var(--bd);
-      padding: 12px 14px;
-    }
-
-    .kpi.ac {
-      border-top: 3px solid var(--orange);
-    }
-
-    .kl {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .kv {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--navy);
-      line-height: 1;
-    }
-
-    .ks {
-      font-size: 11px;
-      margin-top: 4px;
-      color: var(--muted);
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      border: 1px solid var(--bd);
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: 12px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-bottom: 14px;
-    }
-
-    th {
-      text-align: left;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 6px;
-      border-bottom: 1px solid var(--bd);
-    }
-
-    td {
-      padding: 7px 6px;
-      border-bottom: 1px solid var(--bd);
-      color: var(--text);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    td.cur {
-      font-weight: 600;
-    }
-
-    .ga4-link {
-      display: inline-block;
-      background: var(--navy);
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .ga4-link:hover {
-      background: #0f1b2f;
-    }
-
-    .g2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 13px;
-      margin-bottom: 14px;
-    }
-
-    @media(max-width:660px) {
-      .g2 {
-        grid-template-columns: 1fr;
-      }
-      .date-filter {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
-
-    .cw {
-      position: relative;
-      width: 100%;
-      height: 200px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEESA Ads Dashboard — Live</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--navy:#1a2b4a;--orange:#e55a1c;--ol:#fef1eb;--slate:#f5f6f8;--bd:#e2e5eb;--text:#1a2b4a;--muted:#6b7a99;--green:#0a7c4a;--gbg:#eaf5f0;--amber:#b85c00;--abg:#fef4e8;--red:#c0271a;--rbg:#fdecea;--blue:#185fa5;--bbg:#e6f1fb;--gray:#4a5568;--gbg2:#f0f1f3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--slate);color:var(--text);font-size:14px}
+.hdr{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr h1{font-size:17px;font-weight:600}
+.hdr p{font-size:11px;opacity:.6;margin-top:2px}
+.bdg{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--orange);color:#fff}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;opacity:.7}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 14px}
+.date-filter{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.date-filter label{font-size:12px;font-weight:600;color:var(--text)}
+.date-filter input{padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:inherit}
+.date-filter button{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted);transition:all 0.2s}
+.date-filter button:hover{color:var(--text)}
+.date-filter button.load{background:var(--navy);color:#fff;border-color:var(--navy)}
+.date-filter button.quick{background:var(--orange);color:#fff;border-color:var(--orange)}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+.error{background:var(--rbg);color:var(--red);border:1px solid #fcc;border-radius:6px;padding:12px;margin-bottom:18px;font-size:12px}
+.stitle{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:8px}
+.stitle::after{content:'';flex:1;height:1px;background:var(--bd)}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-bottom:1.25rem}
+.kpi{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:12px 14px}
+.kpi.ac{border-top:3px solid var(--orange)}
+.kl{font-size:11px;color:var(--muted);margin-bottom:4px}
+.kv{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+.ks{font-size:11px;margin-top:4px;color:var(--muted)}
+.card{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px;margin-bottom:14px}
+.card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px}
+th{text-align:left;color:var(--muted);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:3px 6px;border-bottom:1px solid var(--bd)}
+td{padding:7px 6px;border-bottom:1px solid var(--text);color:var(--text)}
+tr:last-child td{border-bottom:none}
+td.cur{font-weight:600}
+.ga4-link{display:inline-block;background:var(--navy);color:#fff;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;margin-top:10px}
+.ga4-link:hover{background:#0f1b2f}
+.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.neu{color:var(--muted)}
+</style>
 </head>
 <body>
-  <div class="hdr">
-    <div>
-      <h1>SEESA Ads Performance Dashboard</h1>
-      <p>Live · Meta Ads · HubSpot Deals · Filtered by Date</p>
-    </div>
-    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-      <span class="bdg" id="badge">Select date range</span>
-      <span class="live"><span class="dot"></span>Meta live · HubSpot live</span>
-    </div>
+<div class="hdr">
+  <div><h1>SEESA Ads Performance Dashboard</h1><p>Meta Ads · HubSpot Deals · Filtered by Date · Live</p></div>
+  <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+    <span class="bdg" id="badge">Select date range</span>
+    <span class="live"><span class="dot"></span>Meta live · HubSpot live</span>
   </div>
+</div>
 
-  <div class="wrap">
-    <!-- Date Filter -->
-    <div class="date-filter">
-      <label>Start Date:</label>
-      <input type="date" id="startDate" />
-      <label>End Date:</label>
-      <input type="date" id="endDate" />
-      <button onclick="fetchDashboardData()">Load Data</button>
-      <button onclick="setDateRange('last7')" style="background:var(--orange)">Last 7 Days</button>
-      <button onclick="setDateRange('lastMonth')" style="background:var(--orange)">Last Month</button>
-    </div>
+<div class="wrap">
 
-    <div id="error" class="error" style="display:none;"></div>
-    <div id="loading" class="loading" style="display:none;">Loading dashboard data...</div>
+<!-- Date Filter -->
+<div class="date-filter">
+  <label>Start Date:</label>
+  <input type="date" id="startDate" />
+  <label>End Date:</label>
+  <input type="date" id="endDate" />
+  <button class="load" onclick="fetchDashboardData()">Load Data</button>
+  <button class="quick" onclick="setDateRange('last7')">Last 7 Days</button>
+  <button class="quick" onclick="setDateRange('lastMonth')">Last Month</button>
+</div>
 
-    <!-- Dashboard Content -->
-    <div id="dashboardContent" style="display:none">
-      <div class="stitle" style="margin-top:4px">Overall — Date Range</div>
-      <div class="krow">
-        <div class="kpi ac"><div class="kl">Meta Spend</div><div class="kv" id="totalSpend">—</div><div class="ks" id="dateRange">—</div></div>
-        <div class="kpi ac"><div class="kl">Meta Leads</div><div class="kv" id="totalLeads">—</div><div class="ks">Form submissions</div></div>
-        <div class="kpi ac"><div class="kl">Closed Deals</div><div class="kv" id="totalDeals">—</div><div class="ks">HubSpot closed-won</div></div>
-        <div class="kpi ac"><div class="kl">Deal Value</div><div class="kv" id="totalDealValue">—</div><div class="ks">ZAR</div></div>
-      </div>
+<div id="error" class="error" style="display:none;"></div>
+<div id="loading" class="loading" style="display:none;">Loading dashboard data...</div>
 
-      <!-- Meta Campaigns Table -->
-      <div class="stitle">Meta Campaigns</div>
-      <div class="card">
-        <table>
-          <thead>
-            <tr>
-              <th>Campaign Name</th>
-              <th>Status</th>
-              <th>Spend</th>
-              <th>Impressions</th>
-              <th>CTR</th>
-              <th>CPM</th>
-              <th>Leads</th>
-              <th>Cost/Lead</th>
-            </tr>
-          </thead>
-          <tbody id="campaignsTable">
-            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No data available</td></tr>
-          </tbody>
-        </table>
-      </div>
+<!-- Dashboard Content -->
+<div id="dashboardContent" style="display:none">
 
-      <!-- HubSpot Deals Table -->
-      <div class="stitle">Closed Deals by Source</div>
-      <div class="card">
-        <table>
-          <thead>
-            <tr>
-              <th>Source</th>
-              <th>Deal Count</th>
-            </tr>
-          </thead>
-          <tbody id="dealsBySourceTable">
-            <tr><td colspan="2" style="text-align:center;color:var(--muted);padding:20px">No data available</td></tr>
-          </tbody>
-        </table>
-      </div>
+<div class="stitle" style="margin-top:4px">Overall — Date Range</div>
+<div class="krow">
+  <div class="kpi ac"><div class="kl">Meta Spend</div><div class="kv" id="totalSpend">—</div><div class="ks" id="dateRange">—</div></div>
+  <div class="kpi ac"><div class="kl">Meta Leads</div><div class="kv" id="totalLeads">—</div><div class="ks neu">Form submissions</div></div>
+  <div class="kpi ac"><div class="kl">Closed Deals</div><div class="kv" id="totalDeals">—</div><div class="ks neu">All sources</div></div>
+  <div class="kpi ac"><div class="kl">Deal Value</div><div class="kv" id="totalDealValue">—</div><div class="ks neu">ZAR</div></div>
+</div>
 
-      <!-- GA4 Link -->
-      <div class="stitle">Website Traffic</div>
-      <div class="card">
-        <h3>GA4 Dashboard</h3>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">View live Google Analytics 4 data with top traffic sources, AI search engines, and geographic breakdown.</p>
-        <a href="https://datastudio.google.com/reporting/4ebba862-42a1-42f1-a8e8-b9e544872c28" target="_blank" class="ga4-link">Open GA4 Dashboard in Looker Studio →</a>
-      </div>
-    </div>
-  </div>
+<div class="stitle">Meta Campaigns</div>
+<div class="card">
+<table><thead><tr><th>Campaign Name</th><th>Status</th><th>Spend</th><th>Impr.</th><th>CTR</th><th>CPM</th><th>Results</th><th>Cost/result</th></tr></thead><tbody id="campaignsTable">
+<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No campaigns for this date range</td></tr>
+</tbody></table>
+</div>
 
-  <script>
-    // Set default date range (last 30 days)
-    function setDefaultDates() {
-      const today = new Date();
-      const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-      
-      document.getElementById('startDate').valueAsDate = thirtyDaysAgo;
-      document.getElementById('endDate').valueAsDate = today;
-    }
+<div class="stitle">Closed Deals by Source</div>
+<div class="card">
+<table><thead><tr><th>Source</th><th>Deal Count</th><th>Deal Value</th></tr></thead><tbody id="dealsBySourceTable">
+<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:20px">No deals for this date range</td></tr>
+</tbody></table>
+</div>
 
-    function setDateRange(range) {
-      const today = new Date();
-      let start;
-      
-      if (range === 'last7') {
-        start = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-      } else if (range === 'lastMonth') {
-        start = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-      }
-      
-      document.getElementById('startDate').valueAsDate = start;
-      document.getElementById('endDate').valueAsDate = today;
-      fetchDashboardData();
-    }
+<div class="stitle">Website Traffic & GA4</div>
+<div class="card"><h3>Google Analytics 4 Dashboard</h3>
+<p style="font-size:12px;color:var(--muted);margin-bottom:14px">Live GA4 data with top traffic sources, high-performing pages, geographic breakdown, session metrics, and AI platforms isolated (Perplexity, ChatGPT, Gemini, etc.).</p>
+<a href="https://datastudio.google.com/reporting/4ebba862-42a1-42f1-a8e8-b9e544872c28" target="_blank" class="ga4-link">Open GA4 Dashboard in Looker Studio →</a>
+</div>
 
-    function formatDate(date) {
-      return date.toISOString().split('T')[0];
-    }
+</div>
+</div>
 
-    async function fetchDashboardData() {
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-
-      if (!startDate || !endDate) {
-        showError('Please select both start and end dates');
-        return;
-      }
-
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('dashboardContent').style.display = 'none';
-      document.getElementById('error').style.display = 'none';
-
-      try {
-        const res = await fetch('/api/dashboard-data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ startDate, endDate })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Failed to fetch data');
-        }
-
-        populateDashboard(data);
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('dashboardContent').style.display = 'block';
-      } catch (err) {
-        showError(err.message);
-        document.getElementById('loading').style.display = 'none';
-      }
-    }
-
-    function populateDashboard(data) {
-      const { meta, hubspot, dateRange } = data;
-
-      // Update header
-      document.getElementById('badge').textContent = `${dateRange.startDate} to ${dateRange.endDate}`;
-      document.getElementById('dateRange').textContent = `${dateRange.startDate} to ${dateRange.endDate}`;
-
-      // Update KPIs
-      document.getElementById('totalSpend').textContent = `R${parseFloat(meta.totalSpend).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
-      document.getElementById('totalLeads').textContent = meta.totalLeads;
-      document.getElementById('totalDeals').textContent = hubspot.totalDeals;
-      document.getElementById('totalDealValue').textContent = `R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
-
-      // Populate campaigns table
-      const campaignsHtml = meta.campaigns.map(c => `
-        <tr>
-          <td>${c.name}</td>
-          <td style="color:${c.status === 'ACTIVE' ? 'var(--green)' : 'var(--amber)'}; font-weight:600">${c.status}</td>
-          <td class="cur">${c.spend}</td>
-          <td>${(parseInt(c.impressions) / 1000).toFixed(0)}K</td>
-          <td>${c.ctr}</td>
-          <td>${c.cpm}</td>
-          <td>${c.leads}</td>
-          <td>${c.cpl}</td>
-        </tr>
-      `).join('');
-      
-      document.getElementById('campaignsTable').innerHTML = campaignsHtml || '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No campaigns for this date range</td></tr>';
-
-      // Populate deals by source table
-      const dealsHtml = Object.entries(hubspot.dealsBySource).map(([source, count]) => `
-        <tr>
-          <td>${source}</td>
-          <td class="cur">${count}</td>
-        </tr>
-      `).join('');
-      
-      document.getElementById('dealsBySourceTable').innerHTML = dealsHtml || '<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:20px">No deals for this date range</td></tr>';
-    }
-
-    function showError(message) {
-      const errorDiv = document.getElementById('error');
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-      document.getElementById('loading').style.display = 'none';
-    }
-
-    // Initialize
-    setDefaultDates();
-  </script>
+<script>
+function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(today.getTime()-30*24*60*60*1000);document.getElementById('startDate').valueAsDate=thirtyDaysAgo;document.getElementById('endDate').valueAsDate=today;}
+function setDateRange(range){const today=new Date();let start;if(range==='last7'){start=new Date(today.getTime()-7*24*60*60*1000);}else if(range==='lastMonth'){start=new Date(today.getTime()-30*24*60*60*1000);}
+document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;fetchDashboardData();}
+async function fetchDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){showError('Please select both start and end dates');return;}
+document.getElementById('loading').style.display='block';document.getElementById('dashboardContent').style.display='none';document.getElementById('error').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok){throw new Error(data.error||'Failed to fetch data');}
+populateDashboard(data);document.getElementById('loading').style.display='none';document.getElementById('dashboardContent').style.display='block';}catch(err){showError(err.message);document.getElementById('loading').style.display='none';}}
+function populateDashboard(data){const{meta,hubspot,dateRange}=data;document.getElementById('badge').textContent=`${dateRange.startDate} to ${dateRange.endDate}`;document.getElementById('dateRange').textContent=`${dateRange.startDate} to ${dateRange.endDate}`;document.getElementById('totalSpend').textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('totalLeads').textContent=meta.totalLeads;document.getElementById('totalDeals').textContent=hubspot.totalDeals;document.getElementById('totalDealValue').textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;const campaignsHtml=meta.campaigns.map(c=>`<tr><td>${c.name}</td><td style="color:${c.status==='ACTIVE'?'var(--green)':'var(--amber)'};font-weight:600">${c.status}</td><td class="cur">${c.spend}</td><td>${(parseInt(c.impressions)/1000).toFixed(0)}K</td><td>${c.ctr}</td><td>${c.cpm}</td><td>${c.leads}</td><td>${c.cpl}</td></tr>`).join('');document.getElementById('campaignsTable').innerHTML=campaignsHtml||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No campaigns for this date range</td></tr>';const dealSourceMap={PAID_SOCIAL:'Paid Social',ORGANIC_SEARCH:'Organic Search',DIRECT_TRAFFIC:'Direct Traffic',PAID_SEARCH:'Paid Search',ORGANIC_SOCIAL:'Organic Social',AI_REFERRALS:'AI Referrals',REFERRALS:'Referrals',OFFLINE:'Offline',OTHER_CAMPAIGNS:'Other'};const dealsHtml=Object.entries(hubspot.dealsBySource).map(([source,count])=>`<tr><td>${dealSourceMap[source]||source}</td><td class="cur">${count}</td><td class="cur">—</td></tr>`).join('');document.getElementById('dealsBySourceTable').innerHTML=dealsHtml||'<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:20px">No deals for this date range</td></tr>';}
+function showError(message){const errorDiv=document.getElementById('error');errorDiv.textContent=message;errorDiv.style.display='block';document.getElementById('loading').style.display='none';}
+setDefaultDates();
+</script>
 </body>
 </html>
