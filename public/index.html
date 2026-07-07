@@ -21,7 +21,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .date-filter label{font-size:12px;font-weight:600;color:var(--text)}
 .date-filter input{padding:8px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:inherit}
 .date-filter button{padding:8px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted);transition:all 0.2s}
-.date-filter button:hover{color:var(--text)}
 .date-filter button.load{background:var(--navy);color:#fff;border-color:var(--navy)}
 .date-filter button.quick{background:var(--orange);color:#fff;border-color:var(--orange)}
 .stitle{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1.25rem 0 .6rem;display:flex;align-items:center;gap:8px}
@@ -43,8 +42,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @media(max-width:660px){.g2,.g3{grid-template-columns:1fr}}
 .card{background:#fff;border-radius:10px;border:1px solid var(--bd);padding:14px}
 .card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px}
-.cw{position:relative;width:100%}
-.note{background:var(--abg);border:1px solid #f6b26b;border-radius:7px;padding:9px 11px;font-size:11px;color:#7a3c00;line-height:1.5;margin-bottom:14px}
 .bmt{width:100%;border-collapse:collapse;font-size:12px}
 .bmt th{text-align:left;color:var(--muted);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;padding:3px 6px;border-bottom:1px solid var(--bd)}
 .bmt td{padding:7px 6px;border-bottom:1px solid var(--bd);color:var(--text)}
@@ -53,20 +50,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ga4-link{display:inline-block;background:var(--navy);color:#fff;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;margin-top:10px;border:none}
 .ga4-link:hover{background:#0f1b2f}
 .ft{text-align:center;font-size:10px;color:var(--muted);padding:14px;border-top:1px solid var(--bd);margin-top:6px}
-.ltabs{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
-.ltab{padding:6px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--muted)}
-.ltab.on{background:var(--orange);color:#fff;border-color:var(--orange)}
-.lpanel{display:none}.lpanel.on{display:block}
-.lvwrap{max-height:440px;overflow:auto;border:1px solid var(--bd);border-radius:9px;background:#fff}
-.lvtbl{width:100%;border-collapse:collapse;font-size:11px;min-width:720px}
-.lvtbl th{position:sticky;top:0;z-index:1;background:#fff;text-align:left;color:var(--muted);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:7px 8px;border-bottom:1.5px solid var(--bd)}
-.lvtbl td{padding:6px 8px;border-bottom:1px solid var(--bd);color:var(--text);vertical-align:top}
-.lvtbl th.r,.lvtbl td.r{text-align:right;white-space:nowrap}
-.lvtbl td.lvname,.lvtbl th.lvname{max-width:300px;line-height:1.3}
-.lvtbl tr.lvfoot td{position:sticky;bottom:0;background:var(--slate);font-weight:700;border-top:1.5px solid var(--bd)}
-.lvtbl tbody tr:hover td{background:#fafbfc}
 .loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
 .error{background:var(--rbg);color:var(--red);border:1px solid #fcc;border-radius:6px;padding:12px;margin-bottom:18px;font-size:12px;display:none}
+.note{background:var(--abg);border:1px solid #f6b26b;border-radius:7px;padding:9px 11px;font-size:11px;color:#7a3c00;line-height:1.5;margin-bottom:14px}
+.cw{position:relative;width:100%}
+.pc{background:#fff;border-radius:9px;border:1px solid var(--bd);padding:12px;border-left:4px solid}
+.pct{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:7px}
 </style>
 </head>
 <body>
@@ -99,12 +88,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- OVERALL KPIS -->
 <div class="stitle" style="margin-top:4px">Overall — all channels</div>
 <div class="krow">
-  <div class="kpi ac"><div class="kl">Total ad spend</div><div class="kv" id="totalSpend">—</div><div class="ks neu" id="spendBreakdown">—</div></div>
-  <div class="kpi ac"><div class="kl">Total deals closed</div><div class="kv" id="totalDeals">—</div><div class="ks neu">All sources</div></div>
-  <div class="kpi ac"><div class="kl">Total deal value</div><div class="kv" id="totalDealValue">—</div><div class="ks neu">HubSpot closed-won</div></div>
-  <div class="kpi ac"><div class="kl">Paid deals (ads)</div><div class="kv" id="paidDeals">—</div><div class="ks neu">Paid Social + Paid Search</div></div>
-  <div class="kpi ac"><div class="kl">Paid deal value</div><div class="kv" id="paidDealValue">—</div><div class="ks neu">Meta + Google + Microsoft</div></div>
-  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDeals">—</div><div class="ks neu">Own channel · R0 spend</div></div>
+  <div class="kpi ac"><div class="kl">Meta spend</div><div class="kv" id="metaSpend">—</div><div class="ks neu" id="metaSpendContext">—</div></div>
+  <div class="kpi ac"><div class="kl">Meta leads</div><div class="kv" id="metaLeads">—</div><div class="ks neu">Form submissions</div></div>
+  <div class="kpi ac"><div class="kl">Closed deals</div><div class="kv" id="totalDeals">—</div><div class="ks neu">HubSpot closed-won</div></div>
+  <div class="kpi ac"><div class="kl">Deal value</div><div class="kv" id="totalDealValue">—</div><div class="ks neu">ZAR</div></div>
+  <div class="kpi ai"><div class="kl">AI Referral deals</div><div class="kv" id="aiDeals">—</div><div class="ks neu">Zero ad spend</div></div>
 </div>
 
 <!-- CHANNEL TABS -->
@@ -119,37 +107,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- META TAB -->
 <div id="tab-meta" class="panel on">
-  <div class="g3">
-    <div class="kpi"><div class="kl">Meta spend</div><div class="kv" id="metaSpend">—</div><div class="ks" id="metaSpendContext">—</div></div>
-    <div class="kpi"><div class="kl">Paid Social deals</div><div class="kv" id="metaDeals">—</div><div class="ks" id="metaDealsValue">—</div></div>
-    <div class="kpi"><div class="kl">Cost per deal (Meta)</div><div class="kv" id="metaCPD">—</div><div class="ks" id="metaCPDContext">—</div></div>
-  </div>
-  <div class="g2">
-    <div class="card"><h3>Meta campaigns — active only</h3>
-      <div class="lvwrap"><table class="lvtbl"><thead><tr><th class="lvname">Name</th><th>Status</th><th class="r">Spend</th><th class="r">Impr.</th><th class="r">CTR</th><th class="r">CPM</th><th class="r">Results</th><th class="r">Cost/result</th></tr></thead><tbody id="metaCampaignsTable">
-        <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No campaigns for this date range</td></tr>
-      </tbody></table></div>
-    </div>
+  <div class="card"><h3>Meta campaigns — active only</h3>
+    <table class="bmt"><thead><tr><th>Campaign Name</th><th>Status</th><th>Spend</th><th>Impr.</th><th>CTR</th><th>CPM</th><th>Results</th><th>Cost/result</th></tr></thead><tbody id="metaCampaignsTable">
+      <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">Loading campaigns...</td></tr>
+    </tbody></table>
   </div>
 </div>
 
 <!-- GOOGLE TAB -->
 <div id="tab-google" class="panel">
-  <div class="note">Google Ads campaign-level data not yet connected. Deals below are estimated (80% of Paid Search attributed to Google). Spend is R20,000/month fixed.</div>
+  <div class="note">Google Ads UTM tracking live from 1 Jul 2026. Campaign-level data assessment in August 2026.</div>
   <div class="g3">
-    <div class="kpi ac"><div class="kl">Google spend</div><div class="kv">R20,000</div><div class="ks neu">Fixed monthly budget</div></div>
-    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~6</div><div class="ks neu">Est. deal value: R7,281</div></div>
-    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv warn">R3,333</div><div class="ks good">Within R2k–R4k benchmark ✓</div></div>
+    <div class="kpi ac"><div class="kl">Google spend</div><div class="kv">R20,000</div><div class="ks neu">Monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~6</div><div class="ks neu">From Paid Search</div></div>
+    <div class="kpi ac"><div class="kl">Est. CPD</div><div class="kv">R3,333</div><div class="ks good">Benchmark ✓</div></div>
   </div>
 </div>
 
 <!-- MICROSOFT TAB -->
 <div id="tab-microsoft" class="panel">
-  <div class="note">Microsoft Ads campaign-level data not yet connected. Est. 1 deal attributed to Microsoft (20% of Paid Search). Spend is R5,000/month fixed.</div>
+  <div class="note">Microsoft Ads UTM tracking live from 1 Jul 2026. Campaign-level data assessment in August 2026.</div>
   <div class="g3">
-    <div class="kpi ac"><div class="kl">Microsoft spend</div><div class="kv">R5,000</div><div class="ks neu">Fixed monthly budget</div></div>
-    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~1</div><div class="ks neu">Est. deal value: R1,820</div></div>
-    <div class="kpi ac"><div class="kl">Est. cost per deal</div><div class="kv good">R2,500</div><div class="ks good">Within R2k–R4k benchmark ✓</div></div>
+    <div class="kpi ac"><div class="kl">Microsoft spend</div><div class="kv">R5,000</div><div class="ks neu">Monthly budget</div></div>
+    <div class="kpi ac"><div class="kl">Est. deals</div><div class="kv">~1</div><div class="ks neu">From Paid Search</div></div>
+    <div class="kpi ac"><div class="kl">Est. CPD</div><div class="kv">R2,500</div><div class="ks good">Benchmark ✓</div></div>
   </div>
 </div>
 
@@ -160,12 +141,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="kpi ai"><div class="kl">AI Referral value</div><div class="kv" id="aiDealValue">—</div><div class="ks neu">Total</div></div>
     <div class="kpi ai"><div class="kl">Cost to acquire</div><div class="kv good">R0</div><div class="ks good">Zero paid spend</div></div>
   </div>
-  <div class="card"><h3>Why AI Referrals matters</h3>
-    <table class="bmt"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
-    <tr><td>Ad spend to generate</td><td class="good"><strong>R0</strong></td></tr>
-    <tr><td>Cost per deal</td><td class="good"><strong>R0</strong></td></tr>
-    <tr><td>ROAS</td><td class="good"><strong>Infinite</strong></td></tr>
-    <tr><td>Source</td><td>ChatGPT · Google AI · Claude · Perplexity</td></tr>
+  <div class="card"><h3>Deals by source</h3>
+    <table class="bmt"><thead><tr><th>Source</th><th>Count</th><th>Value</th></tr></thead><tbody id="dealsBySourceTable">
+      <tr><td colspan="3" style="text-align:center;padding:20px;color:var(--muted)">Loading...</td></tr>
     </tbody></table>
   </div>
 </div>
@@ -178,33 +156,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- META DRILL-DOWN LEVELS -->
-<div class="stitle">Meta performance — campaign / ad set / ad</div>
-<div class="note"><strong>Active entities only</strong> — paused, campaign-paused and ended items are hidden. Colour cues: CTR <span class="good">≥4% good</span>/<span class="bad">&lt;1.5% weak</span>, CPM <span class="good">&lt;R40 good</span>/<span class="bad">&gt;R80 high</span>, cost/lead <span class="good">≤R250 good</span>/<span class="bad">&gt;R600 high</span>.</div>
-<div id="mlvlbox">
-  <div class="ltabs">
-    <div class="ltab on" onclick="showLvl('campaign',this)">Campaign</div>
-    <div class="ltab" onclick="showLvl('adset',this)">Ad set</div>
-    <div class="ltab" onclick="showLvl('ad',this)">Ad</div>
+<!-- BILLBOARDS -->
+<div class="stitle">Billboards — active sites</div>
+<div class="note" style="background:var(--rbg);border-color:#e0a0a0;color:#7a1a12">
+<strong>Renewal flag:</strong> the <strong>SB Outdoor</strong> contract (5 sites, R25,000/mo excl VAT) <strong>expires 31 July 2026</strong>. Decision needed before end of July.
+</div>
+<div class="krow">
+  <div class="kpi ac"><div class="kl">Active sites</div><div class="kv">9</div><div class="ks neu">2 contracts</div></div>
+  <div class="kpi ac"><div class="kl">Monthly spend (excl VAT)</div><div class="kv">R65,000</div><div class="ks neu">R74,750 incl VAT</div></div>
+  <div class="kpi ac"><div class="kl">SB Outdoor</div><div class="kv warn">Ends 31 Jul</div><div class="ks warn">5 sites · R25,000/mo</div></div>
+  <div class="kpi ac"><div class="kl">BrandIQ</div><div class="kv good">Ends 31 Oct</div><div class="ks neu">4 sites · R40,000/mo</div></div>
+</div>
+
+<!-- EVENTS -->
+<div class="stitle">Events &amp; webinars</div>
+<div class="note">SEESA brand event calendar 2026 + campaign-linked webinars with Meta ad spend.</div>
+<div class="g2">
+  <div class="card">
+    <h3>SEESA event calendar — 2026</h3>
+    <table class="bmt"><thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Status</th></tr></thead><tbody>
+<tr><td><strong>Nampo</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Past — May major event</div></td><td class="neu">11–16 May 2026</td><td class="neu">Bothaville</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#f1f5f9;color:#475569">Past</span></td></tr>
+<tr><td><strong>Bulls Golf Day</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">Next up</div></td><td class="neu">08 July 2026</td><td class="neu">Pretoria</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#fef4e8;color:#b85c00">Next up</span></td></tr>
+<tr><td><strong>SEESA Jozi Triathlon</strong></td><td class="neu">26 September 2026</td><td class="neu">Benoni</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#e6f1fb;color:#185fa5">Upcoming</span></td></tr>
+    </tbody></table>
   </div>
-  <div id='lvl-campaign' class='lpanel on'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlCampaignTable">
-    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active campaigns</td></tr>
-  </tbody></table></div></div>
-
-  <div id='lvl-adset' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlAdsetTable">
-    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active ad sets</td></tr>
-  </tbody></table></div></div>
-
-  <div id='lvl-ad' class='lpanel'><div class='lvwrap'><table class='lvtbl'><thead><tr><th class='lvname'>Name</th><th>Status</th><th class='r'>Spend</th><th class='r'>Impr.</th><th class='r'>CTR</th><th class='r'>CPM</th><th class='r'>Results</th><th class='r'>Cost/result</th></tr></thead><tbody id="lvlAdTable">
-    <tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active ads</td></tr>
-  </tbody></table></div></div>
+  <div class="card">
+    <h3>Campaign webinars <span style="font-weight:400;color:var(--muted);font-size:10px">(ad-linked)</span></h3>
+    <table class="bmt"><thead><tr><th>Webinar</th><th>Date</th><th>Status</th></tr></thead><tbody>
+      <tr><td><strong>UIF &amp; COID Webinar</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">presenter Jodie Schultz</div></td><td>9 Jul 2026</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#e6f1fb;color:#185fa5">Upcoming</span></td></tr>
+      <tr><td><strong>Foreign Nationals / Labour Inspector</strong><div style="font-size:10px;color:var(--muted);margin-top:2px">in learning phase</div></td><td>Live · 1 Jul</td><td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:#eaf5f0;color:#0a7c4a">Live</span></td></tr>
+    </tbody></table>
+  </div>
 </div>
 
 </div>
 
 </div>
 
-<div class="ft">SEESA (Pty) Ltd · Ads Dashboard · Live Data · Meta (live) · HubSpot (live) · Google & Microsoft (estimated) · Internal use only</div>
+<div class="ft">SEESA (Pty) Ltd · Ads Dashboard · Live Data · Meta (live) · HubSpot (live) · Google & Microsoft (est.) · Internal use only</div>
 
 <script>
 function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(today.getTime()-30*24*60*60*1000);document.getElementById('startDate').valueAsDate=thirtyDaysAgo;document.getElementById('endDate').valueAsDate=today;}
@@ -212,15 +201,13 @@ function setDefaultDates(){const today=new Date();const thirtyDaysAgo=new Date(t
 function setDateRange(range){const today=new Date();let start;if(range==='last7'){start=new Date(today.getTime()-7*24*60*60*1000);}else if(range==='lastMonth'){start=new Date(today.getTime()-30*24*60*60*1000);}
 document.getElementById('startDate').valueAsDate=start;document.getElementById('endDate').valueAsDate=today;loadDashboardData();}
 
-async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||!endDate){showError('Please select both start and end dates');return;}
+async function loadDashboardData(){const startDate=document.getElementById('startDate').value;const endDate=document.getElementById('endDate').value;if(!startDate||endDate){showError('Please select both start and end dates');return;}
 document.getElementById('loading').style.display='block';document.getElementById('dashContent').style.display='none';document.getElementById('error').style.display='none';try{const res=await fetch('/api/dashboard-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({startDate,endDate})});const data=await res.json();if(!res.ok){throw new Error(data.error||'Failed to fetch data');}
 populateDashboard(data);document.getElementById('loading').style.display='none';document.getElementById('dashContent').style.display='block';}catch(err){showError(err.message);document.getElementById('loading').style.display='none';}}
 
-function populateDashboard(data){const{meta,hubspot,dateRange}=data;const googleAds=data.googleAds||{spend:20000,estimatedDeals:6,estimatedDealValue:7281,costPerDeal:3333};const microsoftAds=data.microsoftAds||{spend:5000,estimatedDeals:1,estimatedDealValue:1820,costPerDeal:2500};document.getElementById('badge').textContent=`${dateRange.startDate} to ${dateRange.endDate}`;const totalAdSpend=parseFloat(meta.totalSpend)+(googleAds.spend||20000)+(microsoftAds.spend||5000);document.getElementById('totalSpend').textContent=`R${totalAdSpend.toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('spendBreakdown').textContent=`Meta R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})} · Google R${googleAds.spend} · Microsoft R${microsoftAds.spend}`;document.getElementById('totalDeals').textContent=hubspot.totalDeals;document.getElementById('totalDealValue').textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('paidDeals').textContent=hubspot.paidDeals;document.getElementById('paidDealValue').textContent=`R${parseFloat(hubspot.paidDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('aiDeals').textContent=hubspot.aiReferralDeals;document.getElementById('metaSpend').textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;const metaPaidDeals=hubspot.dealsBySource['PAID_SOCIAL']||0;document.getElementById('metaDeals').textContent=metaPaidDeals;document.getElementById('metaDealsValue').textContent=`R${(metaPaidDeals*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})} deal value`;const cpd=meta.totalLeads>0?(parseFloat(meta.totalSpend)/meta.totalLeads*3.5):-1;document.getElementById('metaCPD').textContent=cpd>0?`R${cpd.toLocaleString('en-ZA',{maximumFractionDigits:0})}`:'-';document.getElementById('metaCPDContext').textContent=`${meta.totalLeads} leads · ${meta.campaigns.length} active campaigns`;const campaignRows=meta.campaigns.slice(0,20).map(c=>{const statusColor=c.effective_status==='ACTIVE'?'var(--green)':'var(--amber)';return`<tr><td class='lvname'>${c.name}</td><td><span style="color:${statusColor};font-weight:600">${c.effective_status}</span></td><td class='r'>${c.spend||'-'}</td><td class='r'>${c.impressions?`${(parseInt(c.impressions)/1000).toFixed(0)}K`:'-'}</td><td class='r'>${c.ctr||'-'}</td><td class='r'>${c.cpm||'-'}</td><td class='r'>${c.leads||'-'}</td><td class='r'>${c.cpl||'-'}</td></tr>`}).join('');document.getElementById('lvlCampaignTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active campaigns</td></tr>';document.getElementById('metaCampaignsTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No campaigns for this date range</td></tr>';document.getElementById('aiDealCount').textContent=hubspot.aiReferralDeals;document.getElementById('aiDealValue').textContent=`R${(hubspot.aiReferralDeals*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;console.log('Dashboard loaded with data:',data);}
+function populateDashboard(data){const{meta,hubspot}=data;document.getElementById('badge').textContent=`${data.dateRange.startDate} to ${data.dateRange.endDate}`;document.getElementById('metaSpend').textContent=`R${parseFloat(meta.totalSpend).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('metaSpendContext').textContent=`${data.dateRange.startDate} to ${data.dateRange.endDate}`;document.getElementById('metaLeads').textContent=meta.totalLeads;document.getElementById('totalDeals').textContent=hubspot.totalDeals;document.getElementById('totalDealValue').textContent=`R${parseFloat(hubspot.totalDealValue).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;document.getElementById('aiDeals').textContent=(hubspot.dealsBySource['AI_REFERRALS']||0);document.getElementById('aiDealCount').textContent=(hubspot.dealsBySource['AI_REFERRALS']||0);document.getElementById('aiDealValue').textContent=`R${((hubspot.dealsBySource['AI_REFERRALS']||0)*1500).toLocaleString('en-ZA',{maximumFractionDigits:0})}`;const campaignRows=meta.campaigns.map(c=>`<tr><td>${c.name||'—'}</td><td style="color:${c.effective_status==='ACTIVE'?'var(--green)':'var(--amber)'}; font-weight:600">${c.effective_status||'—'}</td><td class="cur">${c.amount_spent||'—'}</td><td>${c.impressions?`${(parseInt(c.impressions)/1000).toFixed(0)}K`:'-'}</td><td>${c.ctr||'—'}</td><td>${c.cpm||'—'}</td><td>${c.results?.value||'—'}</td><td>${c.cost_per_result||'—'}</td></tr>`).join('');document.getElementById('metaCampaignsTable').innerHTML=campaignRows||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No campaigns for this date range</td></tr>';const dealRows=Object.entries(hubspot.dealsBySource).map(([source,count])=>{const dealMap={'PAID_SOCIAL':'Paid Social','ORGANIC_SEARCH':'Organic Search','DIRECT_TRAFFIC':'Direct Traffic','PAID_SEARCH':'Paid Search','ORGANIC_SOCIAL':'Organic Social','AI_REFERRALS':'AI Referrals','REFERRALS':'Referrals','OFFLINE':'Offline','OTHER_CAMPAIGNS':'Other'};return`<tr><td>${dealMap[source]||source}</td><td class="cur">${count}</td><td class="cur">—</td></tr>`}).join('');document.getElementById('dealsBySourceTable').innerHTML=dealRows||'<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:20px">No deals</td></tr>';}
 
 function showTab(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('tab-'+id).classList.add('on');el.classList.add('on');}
-
-function showLvl(id,el){document.getElementById('mlvlbox').querySelectorAll('.lpanel').forEach(p=>p.classList.remove('on'));document.getElementById('mlvlbox').querySelectorAll('.ltab').forEach(t=>t.classList.remove('on'));document.getElementById('lvl-'+id).classList.add('on');el.classList.add('on');}
 
 function showError(message){const errorDiv=document.getElementById('error');errorDiv.textContent=message;errorDiv.style.display='block';document.getElementById('loading').style.display='none';}
 
