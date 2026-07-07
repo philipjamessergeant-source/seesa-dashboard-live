@@ -9,60 +9,52 @@ app.use(express.json());
 const SEESA_META_ACCOUNT = '1326328365076410';
 const SEESA_HUBSPOT_PORTAL = '49403143';
 
-// Helper: fetch Meta Ads data BY DATE RANGE using Insights
+// Helper: fetch Meta Ads data BY DATE RANGE using account insights (no breakdowns)
 async function fetchMetaCampaigns(startDate, endDate) {
   try {
-    // Use insights endpoint with date_start and date_stop for proper date filtering
-    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/insights?fields=campaign_id,campaign_name,spend,impressions,clicks,reach,actions,action_values&date_start=${startDate}&date_stop=${endDate}&breakdowns=campaign_id&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
+    // Get account-level insights for date range (no breakdowns - just total spend data)
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/insights?fields=spend,impressions,clicks,reach,actions,action_values&date_start=${startDate}&date_stop=${endDate}&access_token=${process.env.META_ACCESS_TOKEN}`;
     
-    console.log(`Fetching Meta insights from ${startDate} to ${endDate}`);
+    console.log(`[META] Requesting account insights for ${startDate} to ${endDate}`);
     const res = await fetch(url);
     const data = await res.json();
     
+    console.log(`[META] Response status: ${res.status}`);
+    
     if (!res.ok || data.error) {
-      console.error('Meta insights error:', data.error);
+      console.error('[META] API Error:', data.error?.message);
       return [];
     }
     
-    // Group by campaign_id to aggregate
-    const campaignMap = {};
-    (data.data || []).forEach(row => {
-      const campId = row.campaign_id;
-      if (!campaignMap[campId]) {
-        campaignMap[campId] = {
-          id: campId,
-          name: row.campaign_name || 'Unknown',
-          amount_spent: 0,
-          impressions: 0,
-          clicks: 0,
-          reach: 0,
-          results: 0
-        };
-      }
-      campaignMap[campId].amount_spent += parseFloat(row.spend || 0);
-      campaignMap[campId].impressions += parseInt(row.impressions || 0);
-      campaignMap[campId].clicks += parseInt(row.clicks || 0);
-      campaignMap[campId].reach += parseInt(row.reach || 0);
+    // Account-level totals
+    if (data.data && data.data.length > 0) {
+      const row = data.data[0];
+      const totalSpend = parseFloat(row.spend || 0);
+      const totalImpressions = parseInt(row.impressions || 0);
+      const totalClicks = parseInt(row.clicks || 0);
+      const totalResults = row.actions ? row.actions.reduce((sum, a) => sum + parseInt(a.value || 0), 0) : 0;
       
-      // Actions (results/leads)
-      if (row.actions && Array.isArray(row.actions)) {
-        const leadAction = row.actions.find(a => a.action_type === 'lead');
-        if (leadAction) campaignMap[campId].results += parseInt(leadAction.value || 0);
-      }
-    });
+      console.log(`[META] Account totals: Spend R${totalSpend}, Impressions ${totalImpressions}, Results ${totalResults}`);
+      
+      // Return single aggregated "campaign" representing account totals
+      return [{
+        id: 'account-total',
+        name: 'Account Total',
+        amount_spent: totalSpend,
+        impressions: totalImpressions,
+        clicks: totalClicks,
+        reach: row.reach ? parseInt(row.reach) : 0,
+        results: totalResults,
+        effective_status: 'ACTIVE',
+        ctr: totalImpressions > 0 ? `${((totalClicks / totalImpressions) * 100).toFixed(2)}%` : '—',
+        cpm: totalImpressions > 0 ? `R${(totalSpend / (totalImpressions / 1000)).toFixed(2)}` : '—',
+        cost_per_result: totalResults > 0 ? `R${(totalSpend / totalResults).toFixed(2)}` : '—'
+      }];
+    }
     
-    const campaigns = Object.values(campaignMap).map(c => ({
-      ...c,
-      effective_status: 'ACTIVE', // insights only returns active campaigns with spend
-      ctr: c.impressions > 0 ? `${((c.clicks / c.impressions) * 100).toFixed(2)}%` : '—',
-      cpm: c.impressions > 0 ? `R${(c.amount_spent / (c.impressions / 1000)).toFixed(2)}` : '—',
-      cost_per_result: c.results > 0 ? `R${(c.amount_spent / c.results).toFixed(2)}` : '—'
-    }));
-    
-    console.log(`Fetched ${campaigns.length} campaigns with spend for ${startDate} to ${endDate}`);
-    return campaigns;
+    return [];
   } catch (err) {
-    console.error('Meta insights error:', err);
+    console.error('[META] Exception:', err.message);
     return [];
   }
 }
