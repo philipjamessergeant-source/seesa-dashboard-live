@@ -76,7 +76,8 @@ app.post('/api/dashboard-data', async (req, res) => {
     let totalMetaLeads = 0;
     let totalMetaImpressions = 0;
     const campaigns = metaCampaigns.filter(c => c.effective_status === 'ACTIVE').map(c => {
-      totalMetaSpend += parseFloat(c.amount_spent?.replace('ZAR', '').replace(/,/g, '') || 0);
+      const spend = parseFloat((c.amount_spent || '0').toString().replace('ZAR', '').replace(/,/g, '')) || 0;
+      totalMetaSpend += spend;
       const leads = c.results?.value ? parseInt(c.results.value.split(' ')[0]) : 0;
       totalMetaLeads += leads;
       totalMetaImpressions += parseInt(c.impressions || 0);
@@ -102,7 +103,7 @@ app.post('/api/dashboard-data', async (req, res) => {
     
     hubspotDeals.forEach(deal => {
       totalDeals++;
-      const value = deal.properties.amount_in_home_currency || 0;
+      const value = parseFloat(deal.properties.amount_in_home_currency) || 0;
       totalDealValue += value;
       
       const source = deal.properties.hs_analytics_source || 'Other';
@@ -114,14 +115,14 @@ app.post('/api/dashboard-data', async (req, res) => {
     res.json({
       dateRange: { startDate, endDate },
       meta: {
-        totalSpend: totalMetaSpend.toFixed(2),
-        totalLeads: totalMetaLeads,
-        totalImpressions: totalMetaImpressions,
+        totalSpend: (totalMetaSpend || 0).toFixed(2),
+        totalLeads: totalMetaLeads || 0,
+        totalImpressions: totalMetaImpressions || 0,
         campaigns: campaigns
       },
       hubspot: {
-        totalDeals: totalDeals,
-        totalDealValue: totalDealValue.toFixed(2),
+        totalDeals: totalDeals || 0,
+        totalDealValue: (totalDealValue || 0).toFixed(2),
         dealsBySource: dealsBySource,
         dealsByProduct: dealsByProduct
       }
