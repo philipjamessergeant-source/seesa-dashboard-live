@@ -14,10 +14,11 @@ async function fetchMetaCampaigns(startDate, endDate) {
   try {
     // Use campaigns endpoint with time_range for date filtering
     // Format: {"since":"YYYY-MM-DD","until":"YYYY-MM-DD"}
+    // NOTE: time_range limits available fields - only basic fields work
     const timeRange = JSON.stringify({since: startDate, until: endDate});
     const encodedRange = encodeURIComponent(timeRange);
     
-    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,impressions,reach,clicks,ctr,cpm,results,cost_per_result,objective,effective_status,status&time_range=${encodedRange}&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
+    const url = `https://graph.facebook.com/v18.0/act_${SEESA_META_ACCOUNT}/campaigns?fields=id,name,amount_spent,effective_status,status&time_range=${encodedRange}&access_token=${process.env.META_ACCESS_TOKEN}&limit=100`;
     
     console.log(`[META] Requesting campaigns with time_range: ${startDate} to ${endDate}`);
     const res = await fetch(url);
@@ -32,26 +33,24 @@ async function fetchMetaCampaigns(startDate, endDate) {
     
     const campaigns = (data.data || []).map(c => {
       const spend = parseFloat(c.amount_spent || 0);
-      const impressions = parseInt(c.impressions || 0);
-      const clicks = parseInt(c.clicks || 0);
-      const results = c.results?.value ? parseInt(c.results.value.split(' ')[0]) : 0;
       
       return {
         id: c.id,
         name: c.name || 'Unknown',
         amount_spent: spend,
-        impressions: impressions,
-        clicks: clicks,
-        reach: parseInt(c.reach || 0),
-        results: results,
+        impressions: 0,
+        clicks: 0,
+        reach: 0,
+        results: 0,
         effective_status: c.effective_status || 'PAUSED',
-        ctr: impressions > 0 ? `${((clicks / impressions) * 100).toFixed(2)}%` : '—',
-        cpm: impressions > 0 ? `R${(spend / (impressions / 1000)).toFixed(2)}` : '—',
-        cost_per_result: results > 0 ? `R${(spend / results).toFixed(2)}` : '—'
+        ctr: '—',
+        cpm: '—',
+        cost_per_result: '—'
       };
     });
     
     console.log(`[META] Fetched ${campaigns.length} campaigns for ${startDate} to ${endDate}`);
+    campaigns.forEach(c => console.log(`[META]   - ${c.name}: R${c.amount_spent}`));
     return campaigns;
   } catch (err) {
     console.error('[META] Exception:', err.message);
